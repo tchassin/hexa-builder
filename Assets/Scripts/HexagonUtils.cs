@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class HexagonUtils
@@ -8,8 +9,8 @@ public static class HexagonUtils
         => HexGridToWorldPosition(hexPosition.x, hexPosition.y);
     public static Vector3 HexGridToWorldPosition(int x, int y)
     {
-        float worldX = (x + 1 - (y % 2) * 0.5f) * widthRatio;
-        float worldZ = y * 0.75f;
+        float worldX = (x + (y & 1) * 0.5f) * widthRatio;
+        float worldZ = -y * 0.75f;
 
         return new Vector3(worldX, 0.0f, worldZ);
     }

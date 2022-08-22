@@ -200,14 +200,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.23911765, y: 0.3696438, z: -0.09904577, w: 0.89239913}
-  m_LocalPosition: {x: -5, y: 8, z: -5}
+  m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
+  m_LocalPosition: {x: 4.5, y: 7.5, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 30, y: 45, z: 0}
+  m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,10 +434,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9141a6026b65d15498f956f6fb2dfe11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_tilePrefab: {fileID: 919132149155446097, guid: ef7e91236418cd74b922edb8c8df26ae,
+  m_tilePrefab: {fileID: -8551677903827117503, guid: 87b62e037d583314db1a7fc9e9ffd199,
     type: 3}
-  m_groundMaterial: {fileID: 2100000, guid: 5bd8afa8537f37944a50f597113636fa, type: 2}
-  m_waterMaterial: {fileID: 2100000, guid: 6691b501aecab1848975876d10df815a, type: 2}
 --- !u!4 &854185635
 Transform:
   m_ObjectHideFlags: 0
