@@ -11,6 +11,8 @@ public class Cell : MonoBehaviour
     }
 
     [SerializeField] private UnityEvent m_onTerrainChanged;
+    [SerializeField] private UnityEvent m_onMouseEnter;
+    [SerializeField] private UnityEvent m_onMouseExit;
 
     [Header("Material")]
     [SerializeField] private Material m_groundMaterial;
@@ -44,6 +46,8 @@ public class Cell : MonoBehaviour
     public bool hasRoad => m_road != null;
 
     public UnityEvent onTerrainChanged => m_onTerrainChanged;
+    public UnityEvent onMouseEnter => m_onMouseEnter;
+    public UnityEvent onMouseExit => m_onMouseExit;
 
     private Renderer m_renderer;
     private TerrainType m_terrainType;
@@ -56,6 +60,16 @@ public class Cell : MonoBehaviour
         TryGetComponent(out m_renderer);
         for (int i = 0; i < 6; i++)
             m_neighbors.Add(null);
+    }
+
+    private void OnMouseEnter()
+    {
+        m_onMouseEnter.Invoke();
+    }
+
+    private void OnMouseExit()
+    {
+        m_onMouseExit.Invoke();
     }
 
     public void Initialize(Vector2Int gridPosition, TerrainType terrainType)
