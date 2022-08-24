@@ -10,6 +10,7 @@ public enum TerrainType : int
 public class Map : MonoBehaviour
 {
     [SerializeField] private Cell m_cellPrefab;
+    [SerializeField] private GameUI m_gameUI;
 
     public int width => m_size.x;
     public int depth => m_size.y;
@@ -34,6 +35,8 @@ public class Map : MonoBehaviour
         };
 
         Generate(data);
+
+        m_gameUI.Initialize();
     }
 
     private void Update()
@@ -68,6 +71,15 @@ public class Map : MonoBehaviour
             }
         }
     }
+
+    public Cell GetCell(int index)
+        => m_cells[index];
+
+    public Cell GetCell(int x, int y)
+        => GetCell(GridPositionToIndex(x, y));
+
+    public Cell GetCell(Vector2Int position)
+        => GetCell(GridPositionToIndex(position));
 
     public void Generate(int[,] terrainData)
     {

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Cell : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class Cell : MonoBehaviour
         public List<HexDirection> pattern;
         public Mesh mesh;
     }
+
+    [SerializeField] private UnityEvent m_onTerrainChanged;
 
     [Header("Material")]
     [SerializeField] private Material m_groundMaterial;
@@ -39,6 +42,8 @@ public class Cell : MonoBehaviour
     public Vector2Int position => m_position;
     public TerrainType terrainType => m_terrainType;
     public bool hasRoad => m_road != null;
+
+    public UnityEvent onTerrainChanged => m_onTerrainChanged;
 
     private Renderer m_renderer;
     private TerrainType m_terrainType;
@@ -73,6 +78,9 @@ public class Cell : MonoBehaviour
         // Set material
         if (m_renderer)
             m_renderer.material = (terrainType == TerrainType.Ground) ? m_groundMaterial : m_waterMaterial;
+
+        // Notify listeners
+        m_onTerrainChanged.Invoke();
     }
 
     public void SetNeighbor(Cell neighbor, HexDirection direction)
