@@ -9,13 +9,13 @@ public enum TerrainType : int
 
 public class Map : MonoBehaviour
 {
-    [SerializeField] private Tile m_tilePrefab;
+    [SerializeField] private Cell m_cellPrefab;
 
     public int width => m_size.x;
     public int depth => m_size.y;
 
     private Vector2Int m_size;
-    private readonly List<Tile> m_tiles = new List<Tile>();
+    private readonly List<Cell> m_cells = new List<Cell>();
 
     private void Start()
     {
@@ -47,24 +47,24 @@ public class Map : MonoBehaviour
             if (!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue))
                 return;
 
-            var tile = m_tiles.Find(tile => tile.gameObject == hit.transform.gameObject);
-            if (tile == null)
+            var cell = m_cells.Find(cell => cell.gameObject == hit.transform.gameObject);
+            if (cell == null)
                 return;
 
             if (hasLeftClicked)
             {
-                var newTerrainType = (tile.terrainType == TerrainType.Water) ? TerrainType.Ground : TerrainType.Water;
-                tile.SetTerrainType(newTerrainType);
-                if (newTerrainType == TerrainType.Water && tile.hasRoad)
-                    tile.RemoveRoad();
+                var newTerrainType = (cell.terrainType == TerrainType.Water) ? TerrainType.Ground : TerrainType.Water;
+                cell.SetTerrainType(newTerrainType);
+                if (newTerrainType == TerrainType.Water && cell.hasRoad)
+                    cell.RemoveRoad();
             }
 
             if (hasRightClicked)
             {
-                if (tile.hasRoad)
-                    tile.RemoveRoad();
+                if (cell.hasRoad)
+                    cell.RemoveRoad();
                 else
-                    tile.AddRoad();
+                    cell.AddRoad();
             }
         }
     }
@@ -72,45 +72,45 @@ public class Map : MonoBehaviour
     public void Generate(int[,] terrainData)
     {
         m_size = new Vector2Int(terrainData.GetLength(0), terrainData.GetLength(1));
-        int tileCount = m_size.x * m_size.y;
+        int cellCount = m_size.x * m_size.y;
 
         // Clear previous objects and initialize array
-        if (m_tiles != null)
+        if (m_cells != null)
         {
-            foreach (var tileObject in m_tiles)
-                Destroy(tileObject);
+            foreach (var cellObject in m_cells)
+                Destroy(cellObject);
         }
-        m_tiles.Clear();
+        m_cells.Clear();
 
         // Set terrain data
-        for (int i = 0; i < tileCount; i++)
+        for (int i = 0; i < cellCount; i++)
         {
             int x = i % width;
             int y = i / width;
 
-            // Instantiate tile and set position
+            // Instantiate cell and set position
             Vector3 position = HexagonUtils.HexGridToWorldPosition(x, y);
-            var tile = Instantiate(m_tilePrefab, position, Quaternion.identity, transform);
-            tile.Initialize(new Vector2Int(x, y), (terrainData[y, x] != 0) ? TerrainType.Ground : TerrainType.Water);
-            tile.gameObject.name = $"Tile ({x}; {y})";
-            m_tiles.Add(tile);
+            var cell = Instantiate(m_cellPrefab, position, Quaternion.identity, transform);
+            cell.Initialize(new Vector2Int(x, y), (terrainData[y, x] != 0) ? TerrainType.Ground : TerrainType.Water);
+            cell.gameObject.name = $"Cell ({x}; {y})";
+            m_cells.Add(cell);
 
             if (x > 0)
-                tile.SetNeighbor(m_tiles[i - 1], HexDirection.W);
+                cell.SetNeighbor(m_cells[i - 1], HexDirection.W);
 
             if (y > 0)
             {
                 if ((y & 1) == 0) // even rows
                 {
-                    tile.SetNeighbor(m_tiles[i - width], HexDirection.NE);
+                    cell.SetNeighbor(m_cells[i - width], HexDirection.NE);
                     if (x > 0)
-                        tile.SetNeighbor(m_tiles[i - width - 1], HexDirection.NW);
+                        cell.SetNeighbor(m_cells[i - width - 1], HexDirection.NW);
                 }
                 else // odd rows
                 {
-                    tile.SetNeighbor(m_tiles[i - width], HexDirection.NW);
+                    cell.SetNeighbor(m_cells[i - width], HexDirection.NW);
                     if (x < width - 1)
-                        tile.SetNeighbor(m_tiles[i - width + 1], HexDirection.NE);
+                        cell.SetNeighbor(m_cells[i - width + 1], HexDirection.NE);
                 }
             }
         }

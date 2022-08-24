@@ -434,7 +434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9141a6026b65d15498f956f6fb2dfe11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_tilePrefab: {fileID: -8551677903827117503, guid: 87b62e037d583314db1a7fc9e9ffd199,
+  m_cellPrefab: {fileID: -8551677903827117503, guid: 87b62e037d583314db1a7fc9e9ffd199,
     type: 3}
 --- !u!4 &854185635
 Transform:
