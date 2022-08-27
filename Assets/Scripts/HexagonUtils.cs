@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public static class HexagonUtils
@@ -14,4 +13,7 @@ public static class HexagonUtils
 
         return new Vector3(worldX, 0.0f, worldZ);
     }
+
+    public static int Distance(Vector2Int start, Vector2Int end)
+        => Mathf.Abs(start.x - end.x) + Mathf.Abs(start.y - end.y) >> 1;
 }

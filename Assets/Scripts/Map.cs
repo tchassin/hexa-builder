@@ -39,39 +39,6 @@ public class Map : MonoBehaviour
         m_gameUI.Initialize();
     }
 
-    private void Update()
-    {
-        bool hasLeftClicked = Input.GetMouseButtonDown(0);
-        bool hasRightClicked = Input.GetMouseButtonDown(1);
-        bool hasClicked = hasLeftClicked || hasRightClicked;
-        if (hasClicked)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue))
-                return;
-
-            var cell = m_cells.Find(cell => cell.gameObject == hit.transform.gameObject);
-            if (cell == null)
-                return;
-
-            if (hasLeftClicked)
-            {
-                var newTerrainType = (cell.terrainType == TerrainType.Water) ? TerrainType.Ground : TerrainType.Water;
-                cell.SetTerrainType(newTerrainType);
-                if (newTerrainType == TerrainType.Water && cell.hasRoad)
-                    cell.RemoveRoad();
-            }
-
-            if (hasRightClicked)
-            {
-                if (cell.hasRoad)
-                    cell.RemoveRoad();
-                else
-                    cell.AddRoad();
-            }
-        }
-    }
-
     public Cell GetCell(int index)
         => m_cells[index];
 
