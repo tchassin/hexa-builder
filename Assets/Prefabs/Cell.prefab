@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7798612809836208173}
-  - component: {fileID: 6599434392460210056}
+  - component: {fileID: 1195379065598240580}
   - component: {fileID: 8966967938305678146}
   - component: {fileID: 2088539326229042843}
   - component: {fileID: -8551677903827117503}
@@ -35,14 +35,14 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6599434392460210056
+--- !u!33 &1195379065598240580
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7454000149147777687}
-  m_Mesh: {fileID: -4575734979276873811, guid: ef7e91236418cd74b922edb8c8df26ae, type: 3}
+  m_Mesh: {fileID: 5264201581553841347, guid: ef7e91236418cd74b922edb8c8df26ae, type: 3}
 --- !u!23 &8966967938305678146
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -98,7 +98,7 @@ MeshCollider:
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: -4575734979276873811, guid: ef7e91236418cd74b922edb8c8df26ae, type: 3}
+  m_Mesh: {fileID: 5264201581553841347, guid: ef7e91236418cd74b922edb8c8df26ae, type: 3}
 --- !u!114 &-8551677903827117503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,6 +111,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55b459d4a43622c44a8a89a885976b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_onTerrainChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_onMouseEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  m_onMouseExit:
+    m_PersistentCalls:
+      m_Calls: []
   m_groundMaterial: {fileID: 2100000, guid: 5bd8afa8537f37944a50f597113636fa, type: 2}
   m_waterMaterial: {fileID: 2100000, guid: 6691b501aecab1848975876d10df815a, type: 2}
   m_roadPrefab: {fileID: 4903487226167978383, guid: 0e320a97056348149bde1a9ea94fabd7,
