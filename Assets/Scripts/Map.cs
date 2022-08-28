@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -45,8 +46,72 @@ public class Map : MonoBehaviour
     public Cell GetCell(int x, int y)
         => GetCell(GridPositionToIndex(x, y));
 
-    public Cell GetCell(Vector2Int position)
-        => GetCell(GridPositionToIndex(position));
+    public Cell GetCell(HexCoordinates position)
+        => GetCell(position.x, position.z);
+
+    public List<Cell> ShortestPath(Cell start, Cell end, Func<Cell, float> heuristic = null)
+    {
+        int maxDistance = start.DistanceTo(end);
+        var searchFrontier = new HexCellPriorityQueue();
+        var previousCells = new Dictionary<Cell, Cell>();
+        var scores = new Dictionary<Cell, int>();
+        searchFrontier.Enqueue(start, 0);
+
+        while (searchFrontier.Count > 0)
+        {
+            Cell current = searchFrontier.Dequeue();
+
+            if (current == end)
+                return ReconstructPath(end);
+
+            //bool hasPrevious = previousCells.TryGetValue(current, out var previous);
+            foreach (var neighbor in current.neighbors)
+            {
+                if (neighbor == null)
+                    continue;
+
+                int distance = start.DistanceTo(neighbor);
+
+                // Stop instead of going too far
+                if (distance > maxDistance)
+                    continue;
+
+                // Stop if a better path to this node exists
+                if (scores.ContainsKey(neighbor))
+                {
+                    if (scores[neighbor] < distance)
+                        searchFrontier.Change(neighbor, scores[neighbor], distance);
+
+                    continue;
+                }
+
+                scores[neighbor] = distance;
+                previousCells[neighbor] = current;
+
+                float priority = distance;
+                if (heuristic != null)
+                    priority += heuristic(neighbor);
+
+                searchFrontier.Enqueue(neighbor, priority);
+            }
+        }
+
+        return new List<Cell>();
+
+        List<Cell> ReconstructPath(Cell end)
+        {
+            var path = new List<Cell> { end };
+            while (end != start)
+            {
+                end = previousCells[end];
+                path.Add(end);
+            }
+
+            path.Reverse();
+
+            return path;
+        }
+    }
 
     public void Generate(int[,] terrainData)
     {
@@ -61,28 +126,29 @@ public class Map : MonoBehaviour
         }
         m_cells.Clear();
 
-        var positionOffset = -HexagonUtils.HexGridToWorldPosition(m_size) * 0.5f;
+        var positionOffset = -HexMetrics.ToWorldPosition(m_size.x, m_size.y) * 0.5f;
         transform.position = positionOffset;
 
         // Set terrain data
         for (int i = 0; i < cellCount; i++)
         {
             int x = i % width;
-            int y = i / width;
+            int z = i / width;
+            HexCoordinates hexCoordinates = new HexCoordinates(x, z);
 
             // Instantiate cell and set position
-            Vector3 position = HexagonUtils.HexGridToWorldPosition(x, y) + positionOffset;
+            Vector3 position = hexCoordinates.ToPosition() + positionOffset;
             var cell = Instantiate(m_cellPrefab, position, Quaternion.identity, transform);
-            cell.Initialize(new Vector2Int(x, y), (terrainData[y, x] != 0) ? TerrainType.Ground : TerrainType.Water);
-            cell.gameObject.name = $"Cell ({x}; {y})";
+            cell.Initialize(hexCoordinates, (terrainData[hexCoordinates.z, hexCoordinates.x] != 0) ? TerrainType.Ground : TerrainType.Water);
+            cell.gameObject.name = $"Cell ({hexCoordinates.x}; {hexCoordinates.z})";
             m_cells.Add(cell);
 
             if (x > 0)
                 cell.SetNeighbor(m_cells[i - 1], HexDirection.W);
 
-            if (y > 0)
+            if (z > 0)
             {
-                if ((y & 1) == 0) // even rows
+                if ((z & 1) == 0) // even rows
                 {
                     cell.SetNeighbor(m_cells[i - width], HexDirection.NE);
                     if (x > 0)

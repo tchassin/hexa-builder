@@ -69,6 +69,7 @@ public static class DirectionExtensions
 
         return true;
     }
+
     static int GetPermutationDistance(List<HexDirection> directions, List<HexDirection> otherDirections)
     {
         static int GetPermutationDistanceWithOffset(List<HexDirection> directions, List<HexDirection> refDir, int start)
@@ -95,7 +96,6 @@ public static class DirectionExtensions
         return int.MinValue;
     }
 
-
     public static HexDirection Rotate(this HexDirection direction, int rotation)
     {
         int rotated = ((int)direction + rotation) % 6;
@@ -104,4 +104,15 @@ public static class DirectionExtensions
 
         return (HexDirection)rotated;
     }
+
+    public static HexCoordinates ToOffest(this HexDirection direction) => direction switch
+    {
+        HexDirection.E => HexCoordinates.east,
+        HexDirection.SE => HexCoordinates.southEast,
+        HexDirection.SW => HexCoordinates.southWest,
+        HexDirection.W => HexCoordinates.west,
+        HexDirection.NW => HexCoordinates.northWest,
+        HexDirection.NE => HexCoordinates.northEast,
+        _ => HexCoordinates.zero
+    };
 }

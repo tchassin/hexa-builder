@@ -41,8 +41,9 @@ public class Cell : MonoBehaviour
     [Space]
     [SerializeField] private Mesh m_sixWayRoadMesh;
 
-    public Vector2Int position => m_position;
+    public HexCoordinates position => m_position;
     public TerrainType terrainType => m_terrainType;
+    public List<Cell> neighbors => new List<Cell>(m_neighbors);
     public bool hasRoad => m_road != null;
 
     public UnityEvent onTerrainChanged => m_onTerrainChanged;
@@ -51,7 +52,7 @@ public class Cell : MonoBehaviour
 
     private Renderer m_renderer;
     private TerrainType m_terrainType;
-    private Vector2Int m_position;
+    private HexCoordinates m_position;
     private MeshFilter m_road;
     private readonly List<Cell> m_neighbors = new List<Cell>();
 
@@ -72,7 +73,7 @@ public class Cell : MonoBehaviour
         m_onMouseExit.Invoke();
     }
 
-    public void Initialize(Vector2Int gridPosition, TerrainType terrainType)
+    public void Initialize(HexCoordinates gridPosition, TerrainType terrainType)
     {
         m_position = gridPosition;
         SetTerrainType(terrainType);
@@ -96,6 +97,9 @@ public class Cell : MonoBehaviour
         // Notify listeners
         m_onTerrainChanged.Invoke();
     }
+
+    public int DistanceTo(Cell other)
+        => HexCoordinates.Distance(m_position, other.m_position);
 
     public void SetNeighbor(Cell neighbor, HexDirection direction)
     {

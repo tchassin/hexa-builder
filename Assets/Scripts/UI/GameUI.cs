@@ -8,27 +8,33 @@ public class GameUI : MonoBehaviour
 
     private readonly List<UICell> m_uiCells = new List<UICell>();
     private IGridClickHandler m_clickHandler;
+    private Cell m_lastHighlightedCell;
 
     private void Update()
     {
         if (m_clickHandler == null)
             return;
 
-        bool hasLeftClicked = Input.GetMouseButtonDown(0);
-        bool hasRightClicked = Input.GetMouseButtonDown(1);
-        bool hasClicked = hasLeftClicked || hasRightClicked;
-        if (hasClicked)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue))
-                return;
+        Cell cell = null;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue))
+            hit.transform.TryGetComponent(out cell);
 
-            hit.transform.TryGetComponent(out Cell cell);
-            if (hasLeftClicked)
-                m_clickHandler.OnLeftClick(cell);
-            else
-                m_clickHandler.OnRightClick(cell);
+        if (m_lastHighlightedCell != cell)
+        {
+            m_clickHandler.OnCellHoverEnd(m_lastHighlightedCell);
+            m_clickHandler.OnCellHoverBegin(cell);
+            m_lastHighlightedCell = cell;
         }
+
+        if (Input.GetMouseButtonDown(0))
+            m_clickHandler.OnLeftClickBegin(cell);
+        else if (Input.GetMouseButtonUp(0))
+            m_clickHandler.OnLeftClickEnd(cell);
+        else if (Input.GetMouseButtonDown(1))
+            m_clickHandler.OnRightClickBegin(cell);
+        else if (Input.GetMouseButtonUp(1))
+            m_clickHandler.OnRightClickEnd(cell);
     }
 
     public void ToggleTerrainMode(bool isEnabled)
@@ -40,6 +46,9 @@ public class GameUI : MonoBehaviour
     {
         m_clickHandler = isEnabled ? new RoadClickHandler() : null;
     }
+
+    public UICell GetUICell(Cell cell)
+        => m_uiCells.Find(uiCell => uiCell.cell == cell);
 
     public void Initialize()
     {

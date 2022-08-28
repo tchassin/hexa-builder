@@ -1,6 +1,12 @@
 public class TerrainClickHandler : IGridClickHandler
 {
-    public void OnLeftClick(Cell cell)
+    public void OnCellHoverBegin(Cell cell) { }
+
+    public void OnCellHoverEnd(Cell cell) { }
+
+    public void OnLeftClickBegin(Cell cell) { }
+
+    public void OnLeftClickEnd(Cell cell)
     {
         if (cell == null || cell.terrainType == TerrainType.Ground)
             return;
@@ -8,7 +14,9 @@ public class TerrainClickHandler : IGridClickHandler
         cell.SetTerrainType(TerrainType.Ground);
     }
 
-    public void OnRightClick(Cell cell)
+    public void OnRightClickBegin(Cell cell) { }
+
+    public void OnRightClickEnd(Cell cell)
     {
         if (cell == null || cell.terrainType == TerrainType.Water)
             return;
