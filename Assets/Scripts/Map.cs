@@ -61,6 +61,9 @@ public class Map : MonoBehaviour
         }
         m_cells.Clear();
 
+        var positionOffset = -HexagonUtils.HexGridToWorldPosition(m_size) * 0.5f;
+        transform.position = positionOffset;
+
         // Set terrain data
         for (int i = 0; i < cellCount; i++)
         {
@@ -68,7 +71,7 @@ public class Map : MonoBehaviour
             int y = i / width;
 
             // Instantiate cell and set position
-            Vector3 position = HexagonUtils.HexGridToWorldPosition(x, y);
+            Vector3 position = HexagonUtils.HexGridToWorldPosition(x, y) + positionOffset;
             var cell = Instantiate(m_cellPrefab, position, Quaternion.identity, transform);
             cell.Initialize(new Vector2Int(x, y), (terrainData[y, x] != 0) ? TerrainType.Ground : TerrainType.Water);
             cell.gameObject.name = $"Cell ({x}; {y})";
