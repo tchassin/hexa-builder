@@ -13,11 +13,12 @@ public class Map : MonoBehaviour
     [SerializeField] private Cell m_cellPrefab;
     [SerializeField] private GameUI m_gameUI;
 
-    public int width => m_size.x;
-    public int depth => m_size.y;
+    public Vector2Int size => m_size;
+    public Rect worldBounds => m_worldBounds;
 
     private Vector2Int m_size;
     private readonly List<Cell> m_cells = new List<Cell>();
+    private Rect m_worldBounds;
 
     private void Start()
     {
@@ -126,18 +127,21 @@ public class Map : MonoBehaviour
         }
         m_cells.Clear();
 
-        var positionOffset = -HexMetrics.ToWorldPosition(m_size.x, m_size.y) * 0.5f;
+        var xOffset = m_size.y > 1 ? HexMetrics.innerRadius : 0.0f;
+        var worldSize = HexMetrics.ToWorldPosition(m_size.x, m_size.y);
+        var positionOffset = -worldSize * 0.5f;
         transform.position = positionOffset;
+        m_worldBounds = new Rect(positionOffset.x, positionOffset.z, worldSize.x + xOffset, worldSize.z);
 
         // Set terrain data
         for (int i = 0; i < cellCount; i++)
         {
-            int x = i % width;
-            int z = i / width;
+            int x = i % m_size.x;
+            int z = i / m_size.x;
             HexCoordinates hexCoordinates = new HexCoordinates(x, z);
 
             // Instantiate cell and set position
-            Vector3 position = hexCoordinates.ToPosition() + positionOffset;
+            Vector3 position = hexCoordinates.ToPosition() + positionOffset + Vector3.right * xOffset;
             var cell = Instantiate(m_cellPrefab, position, Quaternion.identity, transform);
             cell.Initialize(hexCoordinates, (terrainData[hexCoordinates.z, hexCoordinates.x] != 0) ? TerrainType.Ground : TerrainType.Water);
             cell.gameObject.name = $"Cell ({hexCoordinates.x}; {hexCoordinates.z})";
@@ -150,26 +154,26 @@ public class Map : MonoBehaviour
             {
                 if ((z & 1) == 0) // even rows
                 {
-                    cell.SetNeighbor(m_cells[i - width], HexDirection.NE);
+                    cell.SetNeighbor(m_cells[i - m_size.x], HexDirection.NE);
                     if (x > 0)
-                        cell.SetNeighbor(m_cells[i - width - 1], HexDirection.NW);
+                        cell.SetNeighbor(m_cells[i - m_size.x - 1], HexDirection.NW);
                 }
                 else // odd rows
                 {
-                    cell.SetNeighbor(m_cells[i - width], HexDirection.NW);
-                    if (x < width - 1)
-                        cell.SetNeighbor(m_cells[i - width + 1], HexDirection.NE);
+                    cell.SetNeighbor(m_cells[i - m_size.x], HexDirection.NW);
+                    if (x < m_size.x - 1)
+                        cell.SetNeighbor(m_cells[i - m_size.x + 1], HexDirection.NE);
                 }
             }
         }
     }
 
     public Vector2Int IndexToGridPosition(int id)
-        => new Vector2Int(id % width, id / width);
+        => new Vector2Int(id % m_size.x, id / m_size.x);
 
     public int GridPositionToIndex(Vector2Int position)
         => GridPositionToIndex(position.x, position.y);
 
     public int GridPositionToIndex(int x, int y)
-        => y * width + x;
+        => y * m_size.x + x;
 }

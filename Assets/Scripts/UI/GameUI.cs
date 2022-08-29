@@ -53,9 +53,8 @@ public class GameUI : MonoBehaviour
     public void Initialize()
     {
         var map = FindObjectOfType<Map>();
-        int width = map.width;
-        int depth = map.depth;
-        int cellCount = width * depth;
+        var size = map.size;
+        int cellCount = size.x * size.y;
 
         // Clear previous objects and initialize array
         if (m_uiCells != null)

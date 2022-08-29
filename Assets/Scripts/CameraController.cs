@@ -4,7 +4,9 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] private Rect m_cameraBounds;
+    [SerializeField] private float m_topPadding = 2.0f;
+    [SerializeField] private float m_sidePadding = 2.0f;
+    [SerializeField] private float m_bottomPadding = 2.0f;
     [SerializeField] private Vector2 m_moveSpeed = Vector2.one;
 
     [Header("Zoom")]
@@ -14,12 +16,28 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float m_zoomSpeed = 1.0f;
 
     private Camera m_camera;
+    private Rect m_bounds;
+    private Vector2 m_initialPlanePosition;
 
     private void Awake()
     {
         TryGetComponent(out m_camera);
         m_camera.orthographic = true;
         m_camera.orthographicSize = m_defaultOrthoSize;
+        m_initialPlanePosition = new Vector2(transform.position.x, transform.position.z);
+    }
+
+    public void Start()
+    {
+        var map = FindObjectOfType<Map>();
+        Debug.Assert(map != null, this);
+
+        // Invert Y axis for camera
+        var mapBounds = map.worldBounds;
+        mapBounds.position = new Vector2(mapBounds.x, -mapBounds.y);
+        mapBounds.size = new Vector2(mapBounds.width, -mapBounds.height);
+
+        m_bounds = new Rect(m_initialPlanePosition + mapBounds.position, mapBounds.size);
     }
 
     private void Update()
@@ -32,19 +50,19 @@ public class CameraController : MonoBehaviour
     private void HandleMove()
     {
         float halfVerticalExtent = m_camera.orthographicSize;
-        float yMin = m_cameraBounds.yMin + halfVerticalExtent;
-        float yMax = m_cameraBounds.yMax - halfVerticalExtent;
+        float zMin = m_bounds.yMin - m_bottomPadding + halfVerticalExtent;
+        float zMax = m_bounds.yMax + m_topPadding - halfVerticalExtent;
 
         float halfHorizontalExtent = halfVerticalExtent * m_camera.aspect;
-        float xMin = m_cameraBounds.xMin + halfHorizontalExtent;
-        float xMax = m_cameraBounds.xMax - halfHorizontalExtent;
+        float xMin = m_bounds.xMin - m_sidePadding + halfHorizontalExtent;
+        float xMax = m_bounds.xMax + m_sidePadding - halfHorizontalExtent;
 
         Vector3 targetPosition = transform.position;
         Vector2 scaledSpeed = m_moveSpeed * Time.deltaTime;
         Vector2 movement = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * scaledSpeed;
 
         targetPosition.x = (xMin < xMax) ? Mathf.Clamp(targetPosition.x + movement.x, xMin, xMax) : (xMin + xMax) * 0.5f;
-        targetPosition.z = (yMin < yMax) ? Mathf.Clamp(targetPosition.z + movement.y, yMin, yMax) : (yMin + yMax) * 0.5f;
+        targetPosition.z = (zMin < zMax) ? Mathf.Clamp(targetPosition.z + movement.y, zMin, zMax) : (zMin + zMax) * 0.5f;
 
         transform.position = targetPosition;
     }

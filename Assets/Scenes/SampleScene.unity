@@ -504,13 +504,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 149cc0206f8ac6b46bd2ebdd685cd32c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_cameraBounds:
-    serializedVersion: 2
-    x: -6
-    y: -15.5
-    width: 12
-    height: 4
-  m_moveSpeed: {x: 5, y: 3.5}
+  m_topPadding: 2
+  m_sidePadding: 1
+  m_bottomPadding: 0.5
+  m_moveSpeed: {x: 5, y: 5}
   m_defaultOrthoSize: 4
   m_minOrthoSize: 2
   m_maxOrthoSize: 6
