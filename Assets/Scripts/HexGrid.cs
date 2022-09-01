@@ -8,16 +8,16 @@ public enum TerrainType : int
     Ground,
 }
 
-public class Map : MonoBehaviour
+public class HexGrid : MonoBehaviour
 {
-    [SerializeField] private Cell m_cellPrefab;
+    [SerializeField] private HexCell m_cellPrefab;
     [SerializeField] private GameUI m_gameUI;
 
     public Vector2Int size => m_size;
     public Rect worldBounds => m_worldBounds;
 
     private Vector2Int m_size;
-    private readonly List<Cell> m_cells = new List<Cell>();
+    private readonly List<HexCell> m_cells = new List<HexCell>();
     private Rect m_worldBounds;
 
     private void Start()
@@ -41,26 +41,26 @@ public class Map : MonoBehaviour
         m_gameUI.Initialize();
     }
 
-    public Cell GetCell(int index)
+    public HexCell GetCell(int index)
         => m_cells[index];
 
-    public Cell GetCell(int x, int y)
+    public HexCell GetCell(int x, int y)
         => GetCell(GridPositionToIndex(x, y));
 
-    public Cell GetCell(HexCoordinates position)
+    public HexCell GetCell(HexCoordinates position)
         => GetCell(position.x, position.z);
 
-    public List<Cell> ShortestPath(Cell start, Cell end, Func<Cell, float> heuristic = null)
+    public List<HexCell> ShortestPath(HexCell start, HexCell end, Func<HexCell, float> heuristic = null)
     {
         int maxDistance = start.DistanceTo(end);
         var searchFrontier = new HexCellPriorityQueue();
-        var previousCells = new Dictionary<Cell, Cell>();
-        var scores = new Dictionary<Cell, int>();
+        var previousCells = new Dictionary<HexCell, HexCell>();
+        var scores = new Dictionary<HexCell, int>();
         searchFrontier.Enqueue(start, 0);
 
         while (searchFrontier.Count > 0)
         {
-            Cell current = searchFrontier.Dequeue();
+            HexCell current = searchFrontier.Dequeue();
 
             if (current == end)
                 return ReconstructPath(end);
@@ -97,11 +97,11 @@ public class Map : MonoBehaviour
             }
         }
 
-        return new List<Cell>();
+        return new List<HexCell>();
 
-        List<Cell> ReconstructPath(Cell end)
+        List<HexCell> ReconstructPath(HexCell end)
         {
-            var path = new List<Cell> { end };
+            var path = new List<HexCell> { end };
             while (end != start)
             {
                 end = previousCells[end];

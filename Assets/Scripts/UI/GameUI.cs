@@ -8,14 +8,14 @@ public class GameUI : MonoBehaviour
 
     private readonly List<UICell> m_uiCells = new List<UICell>();
     private IGridClickHandler m_clickHandler;
-    private Cell m_lastHighlightedCell;
+    private HexCell m_lastHighlightedCell;
 
     private void Update()
     {
         if (m_clickHandler == null)
             return;
 
-        Cell cell = null;
+        HexCell cell = null;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue))
             hit.transform.TryGetComponent(out cell);
@@ -47,13 +47,13 @@ public class GameUI : MonoBehaviour
         m_clickHandler = isEnabled ? new RoadClickHandler() : null;
     }
 
-    public UICell GetUICell(Cell cell)
+    public UICell GetUICell(HexCell cell)
         => m_uiCells.Find(uiCell => uiCell.cell == cell);
 
     public void Initialize()
     {
-        var map = FindObjectOfType<Map>();
-        var size = map.size;
+        var grid = FindObjectOfType<HexGrid>();
+        var size = grid.size;
         int cellCount = size.x * size.y;
 
         // Clear previous objects and initialize array
@@ -68,7 +68,7 @@ public class GameUI : MonoBehaviour
         for (int i = 0; i < cellCount; i++)
         {
             var uiCell = Instantiate(m_uiCellPrefab, m_gridCanvas.transform);
-            uiCell.SetCell(map.GetCell(i));
+            uiCell.SetCell(grid.GetCell(i));
 
             m_uiCells.Add(uiCell);
         }

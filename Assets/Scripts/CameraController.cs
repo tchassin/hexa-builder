@@ -29,15 +29,15 @@ public class CameraController : MonoBehaviour
 
     public void Start()
     {
-        var map = FindObjectOfType<Map>();
-        Debug.Assert(map != null, this);
+        var grid = FindObjectOfType<HexGrid>();
+        Debug.Assert(grid != null, this);
 
         // Invert Y axis for camera
-        var mapBounds = map.worldBounds;
-        mapBounds.position = new Vector2(mapBounds.x, -mapBounds.y);
-        mapBounds.size = new Vector2(mapBounds.width, -mapBounds.height);
+        var gridBounds = grid.worldBounds;
+        gridBounds.position = new Vector2(gridBounds.x, -gridBounds.y);
+        gridBounds.size = new Vector2(gridBounds.width, -gridBounds.height);
 
-        m_bounds = new Rect(m_initialPlanePosition + mapBounds.position, mapBounds.size);
+        m_bounds = new Rect(m_initialPlanePosition + gridBounds.position, gridBounds.size);
     }
 
     private void Update()

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Cell : MonoBehaviour
+public class HexCell : MonoBehaviour
 {
     private struct CellPatternMesh
     {
@@ -43,7 +43,7 @@ public class Cell : MonoBehaviour
 
     public HexCoordinates position => m_position;
     public TerrainType terrainType => m_terrainType;
-    public List<Cell> neighbors => new List<Cell>(m_neighbors);
+    public List<HexCell> neighbors => new List<HexCell>(m_neighbors);
     public bool hasRoad => m_road != null;
 
     public UnityEvent onTerrainChanged => m_onTerrainChanged;
@@ -54,7 +54,7 @@ public class Cell : MonoBehaviour
     private TerrainType m_terrainType;
     private HexCoordinates m_position;
     private MeshFilter m_road;
-    private readonly List<Cell> m_neighbors = new List<Cell>();
+    private readonly List<HexCell> m_neighbors = new List<HexCell>();
 
     private void Awake()
     {
@@ -98,23 +98,23 @@ public class Cell : MonoBehaviour
         m_onTerrainChanged.Invoke();
     }
 
-    public int DistanceTo(Cell other)
+    public int DistanceTo(HexCell other)
         => HexCoordinates.Distance(m_position, other.m_position);
 
-    public void SetNeighbor(Cell neighbor, HexDirection direction)
+    public void SetNeighbor(HexCell neighbor, HexDirection direction)
     {
         SetNeighbor(neighbor, (int)direction);
         if (neighbor != null)
             neighbor.SetNeighbor(this, (int)direction.GetOpposite());
     }
 
-    private void SetNeighbor(Cell neighbor, int index)
+    private void SetNeighbor(HexCell neighbor, int index)
     {
         Debug.Assert(m_neighbors[index] == null, this);
         m_neighbors[index] = neighbor;
     }
 
-    public Cell GetNeighbor(HexDirection direction)
+    public HexCell GetNeighbor(HexDirection direction)
         => m_neighbors[(int)direction];
 
     public List<HexDirection> GetNeighborRoads()

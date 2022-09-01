@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class HexCellPriorityQueue
 {
-    private readonly List<List<Cell>> m_cells = new List<List<Cell>>();
+    private readonly List<List<HexCell>> m_cells = new List<List<HexCell>>();
     private readonly List<List<float>> m_priorities = new List<List<float>>();
     private int m_count = 0;
     private int m_minimum = int.MaxValue;
 
     public int Count => m_count;
 
-    public void Enqueue(Cell cell, float priority)
+    public void Enqueue(HexCell cell, float priority)
     {
         if (priority < 0)
             return;
@@ -23,7 +23,7 @@ public class HexCellPriorityQueue
 
         while (index >= m_cells.Count)
         {
-            m_cells.Add(new List<Cell>());
+            m_cells.Add(new List<HexCell>());
             m_priorities.Add(new List<float>());
         }
 
@@ -31,7 +31,7 @@ public class HexCellPriorityQueue
         m_priorities[index].Add(priority);
     }
 
-    public Cell Dequeue()
+    public HexCell Dequeue()
     {
         m_count -= 1;
         for (; m_minimum < m_cells.Count; m_minimum++)
@@ -52,7 +52,7 @@ public class HexCellPriorityQueue
         return null;
     }
 
-    public void Change(Cell cell, float oldPriority, float priority)
+    public void Change(HexCell cell, float oldPriority, float priority)
     {
         var index = m_cells[Mathf.FloorToInt(oldPriority)].IndexOf(cell);
         m_cells[Mathf.FloorToInt(oldPriority)].RemoveAt(index);

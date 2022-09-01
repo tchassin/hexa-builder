@@ -16,9 +16,9 @@ public class UICell : MonoBehaviour
     [SerializeField] private Color m_invalidSelectionColor = Color.white;
     [SerializeField] private Color m_highlightColor = Color.red;
 
-    public Cell cell => m_cell;
+    public HexCell cell => m_cell;
 
-    private Cell m_cell;
+    private HexCell m_cell;
     private Image m_image;
     private State m_state = State.None;
     private bool m_isHighlighted = false;
@@ -28,7 +28,7 @@ public class UICell : MonoBehaviour
         TryGetComponent(out m_image);
     }
 
-    public void SetCell(Cell cell)
+    public void SetCell(HexCell cell)
     {
         if (m_cell == cell)
             return;
