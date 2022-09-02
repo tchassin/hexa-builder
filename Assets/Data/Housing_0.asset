@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d8993ec800b3c4da13a76f7e243423, type: 3}
+  m_Name: Housing_0
+  m_EditorClassIdentifier: 
+  m_cost: 0
+  m_requiredTerrain: 1
+  m_buildingPrefab: {fileID: 919132149155446097, guid: 5984a7bbfcf2cd840a5cde2d93d4738f,
+    type: 3}
+  m_upgrade: {fileID: 0}
+  m_capacity: 3

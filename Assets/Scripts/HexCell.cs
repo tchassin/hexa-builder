@@ -44,7 +44,11 @@ public class HexCell : MonoBehaviour
     public HexCoordinates position => m_position;
     public TerrainType terrainType => m_terrainType;
     public List<HexCell> neighbors => new List<HexCell>(m_neighbors);
+    public Building building => m_building;
+    public bool hasBuilding => m_building != null;
     public bool hasRoad => m_road != null;
+    public bool isOccupied => hasRoad || hasBuilding;
+
 
     public UnityEvent onTerrainChanged => m_onTerrainChanged;
     public UnityEvent onMouseEnter => m_onMouseEnter;
@@ -54,6 +58,7 @@ public class HexCell : MonoBehaviour
     private TerrainType m_terrainType;
     private HexCoordinates m_position;
     private MeshFilter m_road;
+    private Building m_building;
     private readonly List<HexCell> m_neighbors = new List<HexCell>();
 
     private void Awake()
@@ -98,6 +103,14 @@ public class HexCell : MonoBehaviour
         m_onTerrainChanged.Invoke();
     }
 
+    public void SetBuilding(Building building)
+    {
+        Debug.Assert(!hasRoad, this);
+        Debug.Assert(m_building == null || building == null, this);
+
+        m_building = building;
+    }
+
     public int DistanceTo(HexCell other)
         => HexCoordinates.Distance(m_position, other.m_position);
 
@@ -132,10 +145,10 @@ public class HexCell : MonoBehaviour
 
     public void AddRoad()
     {
-        if (terrainType == TerrainType.Water)
+        if (hasRoad || hasBuilding)
             return;
 
-        if (m_road != null)
+        if (terrainType == TerrainType.Water)
             return;
 
         m_road = Instantiate(m_roadPrefab, transform);

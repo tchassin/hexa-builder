@@ -11,6 +11,7 @@ public enum TerrainType : int
 public class HexGrid : MonoBehaviour
 {
     [SerializeField] private HexCell m_cellPrefab;
+    [SerializeField] private Building m_buildingPrefab;
     [SerializeField] private GameUI m_gameUI;
 
     public Vector2Int size => m_size;
@@ -166,6 +167,27 @@ public class HexGrid : MonoBehaviour
                 }
             }
         }
+    }
+
+    public bool SetBuilding(BuildingData buildingData, HexCell cell)
+    {
+        if (buildingData == null)
+        {
+            if (!cell.isOccupied)
+                return false;
+
+            cell.building.Demolish();
+
+            return true;
+        }
+
+        if (cell.isOccupied || !buildingData.CanBeBuiltOn(cell))
+            return false;
+
+        var building = Instantiate(m_buildingPrefab, cell.transform);
+        building.Build(buildingData, cell);
+
+        return true;
     }
 
     public Vector2Int IndexToGridPosition(int id)

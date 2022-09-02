@@ -9,6 +9,7 @@ public class GameUI : MonoBehaviour
     private readonly List<UICell> m_uiCells = new List<UICell>();
     private IGridClickHandler m_clickHandler;
     private HexCell m_lastHighlightedCell;
+    private HexGrid m_grid;
 
     private void Update()
     {
@@ -46,14 +47,22 @@ public class GameUI : MonoBehaviour
     {
         m_clickHandler = isEnabled ? new RoadClickHandler() : null;
     }
+    public void ToggleBuildMode(BuildingData buildingData)
+    {
+        m_clickHandler = buildingData != null
+            ? m_clickHandler is BuildModeClickHandler builder && builder.buildingData == buildingData
+                ? null
+                : new BuildModeClickHandler(m_grid, buildingData)
+            : null;
+    }
 
     public UICell GetUICell(HexCell cell)
         => m_uiCells.Find(uiCell => uiCell.cell == cell);
 
     public void Initialize()
     {
-        var grid = FindObjectOfType<HexGrid>();
-        var size = grid.size;
+        m_grid = FindObjectOfType<HexGrid>();
+        var size = m_grid.size;
         int cellCount = size.x * size.y;
 
         // Clear previous objects and initialize array
@@ -68,7 +77,7 @@ public class GameUI : MonoBehaviour
         for (int i = 0; i < cellCount; i++)
         {
             var uiCell = Instantiate(m_uiCellPrefab, m_gridCanvas.transform);
-            uiCell.SetCell(grid.GetCell(i));
+            uiCell.SetCell(m_grid.GetCell(i));
 
             m_uiCells.Add(uiCell);
         }
