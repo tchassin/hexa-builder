@@ -1,10 +1,13 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameUI : MonoBehaviour
 {
     [SerializeField] private UICell m_uiCellPrefab;
     [SerializeField] private Canvas m_gridCanvas;
+    [SerializeField] private TextMeshProUGUI m_goldLabel;
+    [SerializeField] private TextMeshProUGUI m_populationLabel;
 
     private readonly List<UICell> m_uiCells = new List<UICell>();
     private IGridClickHandler m_clickHandler;
@@ -13,6 +16,12 @@ public class GameUI : MonoBehaviour
 
     private void Update()
     {
+        if (m_goldLabel)
+            m_goldLabel.text = Player.instance.gold.ToString();
+
+        if (m_populationLabel)
+            m_populationLabel.text = Player.instance.population.ToString();
+
         if (m_clickHandler == null)
             return;
 
