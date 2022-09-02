@@ -13,7 +13,7 @@ public class Building : MonoBehaviour
     private readonly Stack<BuildingData> m_upgradePath = new Stack<BuildingData>();
 
     public bool CanBeUpgraded()
-        => data != null && data.hasUpgrade && data.upgrade.CanBeBuiltOn(cell);
+        => data != null && data.hasUpgrade && data.upgrade.CanBeAfforded() && data.upgrade.CanBeBuiltOn(cell);
 
     public void Build(BuildingData data, HexCell cell)
     {
@@ -22,7 +22,11 @@ public class Building : MonoBehaviour
         m_cell = cell;
         m_cell.SetBuilding(this);
 
+
         Debug.Assert(data != null, this);
+        Debug.Assert(data.CanBeAfforded(), this);
+        Player.instance.UseGold(data.cost);
+
         Debug.Assert(data.CanBeBuiltOn(cell), this);
         Debug.Assert(upgradeCount == 0, this);
         m_upgradePath.Push(data);
@@ -50,6 +54,7 @@ public class Building : MonoBehaviour
 
         m_upgradePath.Pop();
         OnDataChanged();
+        Player.instance.UseGold(data.cost);
 
         data.OnInstanceUpgradedTo(this);
     }

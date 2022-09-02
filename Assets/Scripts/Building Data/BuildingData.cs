@@ -20,6 +20,8 @@ public abstract class BuildingData : ScriptableObject
     public virtual void OnInstanceDowngradedFrom(Building building) { }
     public virtual void OnInstanceUpdated(Building building) { }
 
+    public bool CanBeAfforded()
+        => Player.instance.gold >= m_cost;
     public virtual bool CanBeBuiltOn(HexCell cell)
         => cell != null && m_requiredTerrain == cell.terrainType;
 }
