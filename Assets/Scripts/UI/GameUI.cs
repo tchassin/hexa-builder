@@ -6,8 +6,19 @@ public class GameUI : MonoBehaviour
 {
     [SerializeField] private UICell m_uiCellPrefab;
     [SerializeField] private Canvas m_gridCanvas;
+
+    [Header("Label")]
     [SerializeField] private TextMeshProUGUI m_goldLabel;
     [SerializeField] private TextMeshProUGUI m_populationLabel;
+
+    [Header("Preview")]
+    [SerializeField] private Material m_previewMaterial;
+    [SerializeField] private Color m_previewColor = Color.green;
+    [SerializeField] private Color m_invalidPreviewColor = Color.red;
+
+    public Material previewMaterial => m_previewMaterial;
+    public Color previewColor => m_previewColor;
+    public Color invalidPreviewColor => m_invalidPreviewColor;
 
     private readonly List<UICell> m_uiCells = new List<UICell>();
     private IGridClickHandler m_clickHandler;
@@ -25,11 +36,7 @@ public class GameUI : MonoBehaviour
         if (m_clickHandler == null)
             return;
 
-        HexCell cell = null;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue))
-            hit.transform.TryGetComponent(out cell);
-
+        HexCell cell = GetCellUnderMouse();
         if (m_lastHighlightedCell != cell)
         {
             m_clickHandler.OnCellHoverEnd(m_lastHighlightedCell);
@@ -47,6 +54,16 @@ public class GameUI : MonoBehaviour
             m_clickHandler.OnRightClickEnd(cell);
     }
 
+    public HexCell GetCellUnderMouse()
+    {
+        HexCell cell = null;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue))
+            hit.transform.TryGetComponent(out cell);
+
+        return cell;
+    }
+
     public void ToggleTerrainMode(bool isEnabled)
     {
         m_clickHandler = isEnabled ? new TerrainClickHandler() : null;
@@ -56,12 +73,13 @@ public class GameUI : MonoBehaviour
     {
         m_clickHandler = isEnabled ? new RoadClickHandler() : null;
     }
+
     public void ToggleBuildMode(BuildingData buildingData)
     {
         m_clickHandler = buildingData != null
             ? m_clickHandler is BuildModeClickHandler builder && builder.buildingData == buildingData
                 ? null
-                : new BuildModeClickHandler(m_grid, buildingData)
+                : new BuildModeClickHandler(this, m_grid, buildingData)
             : null;
     }
 

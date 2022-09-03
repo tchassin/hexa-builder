@@ -51,6 +51,9 @@ public class HexGrid : MonoBehaviour
     public HexCell GetCell(HexCoordinates position)
         => GetCell(position.x, position.z);
 
+    public HexCell GetCell(Vector3 position)
+        => GetCell(HexCoordinates.FromPosition(position));
+
     public List<HexCell> ShortestPath(HexCell start, HexCell end, Func<HexCell, float> heuristic = null)
     {
         int maxDistance = start.DistanceTo(end);
