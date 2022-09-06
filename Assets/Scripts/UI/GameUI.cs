@@ -64,6 +64,10 @@ public class GameUI : MonoBehaviour
     {
         m_clickHandler = isEnabled ? new RoadClickHandler() : null;
     }
+    public void ToggleAddTreeMode(bool isEnabled)
+    {
+        m_clickHandler = isEnabled ? new PropsClickHandler(BuildModeManager.instance.treePrefab) : null;
+    }
 
     public void ToggleBuildMode(BuildingData buildingData)
     {
