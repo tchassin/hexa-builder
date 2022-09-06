@@ -32,7 +32,7 @@ public class RoadClickHandler : IGridClickHandler
         foreach (var pathCell in path)
         {
             var uiCell = m_gameUI.GetUICell(pathCell);
-            uiCell.SetState((pathCell.terrainType == TerrainType.Ground && !pathCell.hasRoad)
+            uiCell.SetState(BuildModeManager.instance.roadPrefab.CanBePlacedOn(cell)
                 ? UICell.State.Selected
                 : UICell.State.Invalid);
 
@@ -58,11 +58,11 @@ public class RoadClickHandler : IGridClickHandler
         if (!isPlacingRoads)
             return;
 
+        var path = new List<HexCell>(m_selectedCells.Count);
         foreach (var uiCell in m_selectedCells)
-        {
-            if (uiCell.cell.terrainType == TerrainType.Ground && !uiCell.cell.hasRoad)
-                uiCell.cell.AddRoad();
-        }
+            path.Add(uiCell.cell);
+
+        BuildModeManager.instance.PlaceRoads(path);
 
         EndBuildMode();
     }
@@ -72,15 +72,7 @@ public class RoadClickHandler : IGridClickHandler
     public void OnRightClickEnd(HexCell cell)
     {
         if (isPlacingRoads)
-        {
             EndBuildMode();
-            return;
-        }
-
-        if (cell == null || !cell.hasRoad)
-            return;
-
-        cell.RemoveRoad();
     }
 
     private void EndBuildMode()

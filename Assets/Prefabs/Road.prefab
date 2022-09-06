@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 48771943196965779}
   - component: {fileID: 1217776259197387004}
   - component: {fileID: 4903487226167978383}
+  - component: {fileID: -7614457537212418302}
   m_Layer: 0
   m_Name: Road
   m_TagString: Untagged
@@ -83,3 +84,42 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 857537149471482153}
   m_Mesh: {fileID: 154335123301926439, guid: 93f5dd48342d746468ffd6fd6fe21a06, type: 3}
+--- !u!114 &-7614457537212418302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 857537149471482153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64345e0b4bd527549bdb4d374013a89c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_cost: 0
+  m_isolatedRoadMesh: {fileID: 2765824788189693173, guid: 59fe59241fc5edb47aff3fce4f1d9663,
+    type: 3}
+  m_singleRoadMesh: {fileID: -6630861152324605588, guid: e9d20763a115ad145bd02732f867c411,
+    type: 3}
+  m_twoWayAcrossMesh: {fileID: 154335123301926439, guid: 93f5dd48342d746468ffd6fd6fe21a06,
+    type: 3}
+  m_twoWaySharpTurnMesh: {fileID: -1995145896294989545, guid: 4172a5a3beea39d408c6e7af415e83cf,
+    type: 3}
+  m_twoWayTurnMesh: {fileID: 7942794631595062007, guid: 35c264ee12f328e4eb53b5467b95a488,
+    type: 3}
+  m_threeWayEvenMesh: {fileID: -3487985042935114305, guid: c3d9aa52e123fb746920536b4a5537b3,
+    type: 3}
+  m_threeWaySameSideMesh: {fileID: 2747773294801813910, guid: 15d0ac0c09dca654fb369e5d293a9036,
+    type: 3}
+  m_threeWaySplitMesh: {fileID: -6065002112146725950, guid: 1bcfc4503534e804189ecdc418021c05,
+    type: 3}
+  m_fourWayForkRoadMesh: {fileID: 5893634946677872631, guid: a6bba6086f3060f4e9e96a31281d28d4,
+    type: 3}
+  m_fourWayXRoadMesh: {fileID: -1807029210371240964, guid: 0af5d10303c5bcd41b876326b6f417f5,
+    type: 3}
+  m_fourWayKRoadMesh: {fileID: 1313207949467024674, guid: 69ab2684feaaf8f45b7009eda957f4db,
+    type: 3}
+  m_fiveWayRoadMesh: {fileID: 3021423541888656990, guid: 4255cdb0ba5ab9d4aa4527a6a419e84e,
+    type: 3}
+  m_sixWayRoadMesh: {fileID: 4299298378033379350, guid: 9a19314f7c42706418f74ca2b24b211f,
+    type: 3}

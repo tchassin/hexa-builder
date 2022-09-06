@@ -1543,9 +1543,6 @@ MonoBehaviour:
   m_gridCanvas: {fileID: 1208879835}
   m_goldLabel: {fileID: 551636794}
   m_populationLabel: {fileID: 400010746}
-  m_previewMaterial: {fileID: 2100000, guid: 291fc42f2620dbf42b228817bd5e6c4b, type: 2}
-  m_previewColor: {r: 0, g: 1, b: 0, a: 0.5019608}
-  m_invalidPreviewColor: {r: 1, g: 0, b: 0, a: 0.5019608}
 --- !u!1 &1208879833
 GameObject:
   m_ObjectHideFlags: 0
@@ -1709,6 +1706,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1530921316}
   - component: {fileID: 1530921315}
+  - component: {fileID: 1530921317}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1744,6 +1742,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1530921317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1530921314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ffbc2f20c7a354881082d2e2676371, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_buildingPrefab: {fileID: 2958186983408077007, guid: 40f05f020854eef4ba01c015fa62a81f,
+    type: 3}
+  m_roadPrefab: {fileID: -7614457537212418302, guid: 0e320a97056348149bde1a9ea94fabd7,
+    type: 3}
+  m_treePrefab: {fileID: 7544545718906022610, guid: 4940420ef324b1a44bd32474e9fa9763,
+    type: 3}
+  m_previewMaterial: {fileID: 2100000, guid: 291fc42f2620dbf42b228817bd5e6c4b, type: 2}
+  m_previewColor: {r: 0, g: 1, b: 0, a: 1}
+  m_invalidPreviewColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &1709680657
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,15 +11,6 @@ public class GameUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI m_goldLabel;
     [SerializeField] private TextMeshProUGUI m_populationLabel;
 
-    [Header("Preview")]
-    [SerializeField] private Material m_previewMaterial;
-    [SerializeField] private Color m_previewColor = Color.green;
-    [SerializeField] private Color m_invalidPreviewColor = Color.red;
-
-    public Material previewMaterial => m_previewMaterial;
-    public Color previewColor => m_previewColor;
-    public Color invalidPreviewColor => m_invalidPreviewColor;
-
     private readonly List<UICell> m_uiCells = new List<UICell>();
     private IGridClickHandler m_clickHandler;
     private HexCell m_lastHighlightedCell;
@@ -79,7 +70,7 @@ public class GameUI : MonoBehaviour
         m_clickHandler = buildingData != null
             ? m_clickHandler is BuildModeClickHandler builder && builder.buildingData == buildingData
                 ? null
-                : new BuildModeClickHandler(this, m_grid, buildingData)
+                : new BuildModeClickHandler(buildingData)
             : null;
     }
 

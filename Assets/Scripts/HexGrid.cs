@@ -172,27 +172,6 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    public bool SetBuilding(BuildingData buildingData, HexCell cell)
-    {
-        if (buildingData == null)
-        {
-            if (!cell.isOccupied)
-                return false;
-
-            cell.building.Demolish();
-
-            return true;
-        }
-
-        if (cell.isOccupied || !buildingData.CanBeBuiltOn(cell))
-            return false;
-
-        var building = Instantiate(m_buildingPrefab, cell.transform);
-        building.Build(buildingData, cell);
-
-        return true;
-    }
-
     public Vector2Int IndexToGridPosition(int id)
         => new Vector2Int(id % m_size.x, id / m_size.x);
 

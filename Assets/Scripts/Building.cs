@@ -1,49 +1,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Building : MonoBehaviour
+public class Building : HexCellContent
 {
     public int upgradeCount => m_upgradePath.Count;
     public bool canBeDowngraded => upgradeCount > 1;
     public BuildingData data => m_upgradePath.Peek();
-    public HexCell cell => m_cell;
+
+    public override TerrainType requiredTerrainType => TerrainType.Ground;
 
     private GameObject m_model;
-    private HexCell m_cell;
     private readonly Stack<BuildingData> m_upgradePath = new Stack<BuildingData>();
 
-    public bool CanBeUpgraded()
-        => data != null && data.hasUpgrade && data.upgrade.CanBeAfforded() && data.upgrade.CanBeBuiltOn(cell);
-
-    public void Build(BuildingData data, HexCell cell)
+    public void Initialize(BuildingData data)
     {
-        Debug.Assert(cell != null, this);
-        Debug.Assert(!cell.isOccupied, this);
-        m_cell = cell;
-        m_cell.SetBuilding(this);
-
-
-        Debug.Assert(data != null, this);
-        Debug.Assert(data.CanBeAfforded(), this);
-        Player.instance.UseGold(data.cost);
-
-        Debug.Assert(data.CanBeBuiltOn(cell), this);
         Debug.Assert(upgradeCount == 0, this);
         m_upgradePath.Push(data);
         OnDataChanged();
+    }
 
+    public override void OnPlacedOn(HexCell cell)
+    {
+        base.OnPlacedOn(cell);
+
+        Debug.Assert(data != null, this);
         data.OnInstanceBuilt(this);
     }
 
-    public void Demolish()
+    public override void OnRemoved()
     {
         if (data)
             data.OnInstanceDemolished(this);
-
-        m_cell.SetBuilding(null);
-
-        Destroy(gameObject);
     }
+
+    public bool CanBeUpgraded()
+        => data != null && data.hasUpgrade && data.upgrade.CanBeAfforded() && data.upgrade.CanBeBuiltOn(cell);
 
     public void Upgrade()
     {

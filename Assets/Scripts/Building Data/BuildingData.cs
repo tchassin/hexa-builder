@@ -23,5 +23,5 @@ public abstract class BuildingData : ScriptableObject
     public bool CanBeAfforded()
         => Player.instance.gold >= m_cost;
     public virtual bool CanBeBuiltOn(HexCell cell)
-        => cell != null && m_requiredTerrain == cell.terrainType;
+        => cell != null && m_requiredTerrain == cell.terrainType && !cell.isOccupied;
 }
