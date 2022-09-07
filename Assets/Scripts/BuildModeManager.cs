@@ -36,9 +36,10 @@ public class BuildModeManager : MonoBehaviour
         if (m_preview != null)
             Destroy(m_preview);
 
-        m_preview = Instantiate(previewPrefab, m_grid.transform);
+        m_preview = Instantiate(previewPrefab, Vector3.zero, Quaternion.Euler(0, -120.0f, 0), m_grid.transform);
         if (m_preview.TryGetComponent(out MeshRenderer meshRenderer))
             meshRenderer.material = m_previewMaterial;
+
 
         m_preview.SetActive(false);
     }
@@ -57,16 +58,18 @@ public class BuildModeManager : MonoBehaviour
         if (!buildingData.CanBeAfforded())
             return false;
 
-        Player.instance.UseGold(buildingData.cost);
-
         var building = Instantiate(m_buildingPrefab, cell.transform);
         building.Initialize(buildingData);
+        building.RotateMesh(Random.Range(-2, 3));
         cell.SetContent(building);
+
+        Player.instance.UseGold(buildingData.cost);
 
         m_preview.SetActive(false);
 
         return true;
     }
+
     public bool PlaceProp(Prop propPrefab, HexCell cell)
     {
         if (!propPrefab.CanBePlacedOn(cell))

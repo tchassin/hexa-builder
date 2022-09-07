@@ -65,15 +65,6 @@ public class Building : HexCellContent
         }
     }
 
-    public void RotateMeshToward(HexDirection direction)
-        => RotateMesh(HexDirection.E.DistanceTo(direction));
-
-    public void RotateMesh(int distance)
-    {
-        // Clamp angle to ]-180; 180]
-        int clampedDistance = distance > 3 ? distance - 6 : distance <= -3 ? distance + 6 : distance;
-        m_meshFilter.transform.localEulerAngles = Vector3.up * (clampedDistance * 60.0f);
-    }
     public override void OnPlacedOn(HexCell cell)
     {
         base.OnPlacedOn(cell);
@@ -116,6 +107,16 @@ public class Building : HexCellContent
         OnDataChanged();
 
         data.OnInstanceDowngradedTo(this);
+    }
+
+    public void RotateMeshToward(HexDirection direction)
+        => RotateMesh(HexDirection.E.DistanceTo(direction));
+
+    public void RotateMesh(int distance)
+    {
+        // Clamp angle to ]-180; 180]
+        int clampedDistance = distance > 3 ? distance - 6 : distance <= -3 ? distance + 6 : distance;
+        m_meshFilter.transform.localEulerAngles = Vector3.up * (clampedDistance * 60.0f);
     }
 
     private void OnDataChanged()
