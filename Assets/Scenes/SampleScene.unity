@@ -2193,7 +2193,7 @@ PrefabInstance:
     - target: {fileID: 7541487398242455079, guid: a879209ba8b6ba44f9910333c6131b04,
         type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ToggleBuildRoadMode
+      value: ToggleDestroyMode
       objectReference: {fileID: 0}
     - target: {fileID: 7541487398242455079, guid: a879209ba8b6ba44f9910333c6131b04,
         type: 3}

@@ -82,6 +82,11 @@ public class GameUI : MonoBehaviour
             : null;
     }
 
+    public void ToggleDestroyMode(bool isEnabled)
+    {
+        m_clickHandler = isEnabled ? new DestroyModeClickHandler() : null;
+    }
+
     public UICell GetUICell(HexCell cell)
         => m_uiCells.Find(uiCell => uiCell.cell == cell);
 
