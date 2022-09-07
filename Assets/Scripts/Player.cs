@@ -26,8 +26,7 @@ public class Player : MonoBehaviour
 
     public bool UseGold(int gold)
     {
-        if (gold > m_gold)
-            return false;
+        Debug.Assert(gold <= m_gold, this);
 
         m_gold -= gold;
 

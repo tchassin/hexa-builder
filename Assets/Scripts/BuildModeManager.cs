@@ -86,15 +86,23 @@ public class BuildModeManager : MonoBehaviour
 
     public bool PlaceRoads(RoadData roadData, List<HexCell> path)
     {
+        int totalCost = 0;
         foreach (var cell in path)
         {
             if (!roadData.CanBePlacedOn(cell))
                 continue;
 
+            if (Player.instance.gold < totalCost + roadData.cost)
+                break;
+
             var road = Instantiate(m_buildingPrefab, cell.transform);
             road.Initialize(roadData);
             cell.SetContent(road);
+
+            totalCost += roadData.cost;
         }
+
+        Player.instance.UseGold(totalCost);
 
         return true;
     }
