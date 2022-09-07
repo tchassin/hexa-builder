@@ -34,6 +34,9 @@ public class BuildModeManager : MonoBehaviour
         Debug.Assert(m_grid != null);
         Debug.Assert(previewPrefab != null);
 
+        if (m_preview != null)
+            Destroy(m_preview);
+
         m_preview = Instantiate(previewPrefab, m_grid.transform);
         if (m_preview.TryGetComponent(out MeshRenderer meshRenderer))
             meshRenderer.material = m_previewMaterial;
