@@ -78,6 +78,6 @@ public class CameraController : MonoBehaviour
         // This compensate the effect to make zooming smoother
         float speedFactor = m_camera.orthographicSize / m_defaultOrthoSize;
         float orthographicSize = m_camera.orthographicSize - scroll * m_zoomSpeed * speedFactor;
-        m_camera.orthographicSize = Mathf.Clamp(orthographicSize, 1 / m_minOrthoSize, m_maxOrthoSize);
+        m_camera.orthographicSize = Mathf.Clamp(orthographicSize, m_minOrthoSize, m_maxOrthoSize);
     }
 }
