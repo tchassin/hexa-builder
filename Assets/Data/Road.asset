@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bac5672894ecedc4cac7585d547a3360, type: 3}
+  m_Name: Road
+  m_EditorClassIdentifier: 
+  m_requiredTerrain: 1
+  m_cost: 1
+  m_buildingPrefab: {fileID: 919132149155446097, guid: 59fe59241fc5edb47aff3fce4f1d9663,
+    type: 3}
+  m_upgrade: {fileID: 0}
+  m_singleMesh: {fileID: 2765824788189693173, guid: 59fe59241fc5edb47aff3fce4f1d9663,
+    type: 3}
+  m_oneWayMesh: {fileID: -6630861152324605588, guid: e9d20763a115ad145bd02732f867c411,
+    type: 3}
+  m_twoWayAcrossMesh: {fileID: 154335123301926439, guid: 93f5dd48342d746468ffd6fd6fe21a06,
+    type: 3}
+  m_twoWaySharpTurnMesh: {fileID: -1995145896294989545, guid: 4172a5a3beea39d408c6e7af415e83cf,
+    type: 3}
+  m_twoWayTurnMesh: {fileID: 7942794631595062007, guid: 35c264ee12f328e4eb53b5467b95a488,
+    type: 3}
+  m_threeWayEvenMesh: {fileID: -3487985042935114305, guid: c3d9aa52e123fb746920536b4a5537b3,
+    type: 3}
+  m_threeWaySameSideMesh: {fileID: 2747773294801813910, guid: 15d0ac0c09dca654fb369e5d293a9036,
+    type: 3}
+  m_threeWaySplitMesh: {fileID: -6065002112146725950, guid: 1bcfc4503534e804189ecdc418021c05,
+    type: 3}
+  m_fourWayForkRoadMesh: {fileID: 5893634946677872631, guid: a6bba6086f3060f4e9e96a31281d28d4,
+    type: 3}
+  m_fourWayKRoadMesh: {fileID: 1313207949467024674, guid: 69ab2684feaaf8f45b7009eda957f4db,
+    type: 3}
+  m_fourWayXRoadMesh: {fileID: -1807029210371240964, guid: 0af5d10303c5bcd41b876326b6f417f5,
+    type: 3}
+  m_fiveWayMesh: {fileID: 3021423541888656990, guid: 4255cdb0ba5ab9d4aa4527a6a419e84e,
+    type: 3}
+  m_sixWayMesh: {fileID: 4299298378033379350, guid: 9a19314f7c42706418f74ca2b24b211f,
+    type: 3}

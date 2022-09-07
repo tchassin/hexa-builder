@@ -1,9 +1,8 @@
 using UnityEngine;
 
-public abstract class BuildingData : ScriptableObject
+public abstract class BuildingData : CellContentData
 {
     [SerializeField] private int m_cost;
-    [SerializeField] private TerrainType m_requiredTerrain = TerrainType.Ground;
     [SerializeField] private GameObject m_buildingPrefab;
     [SerializeField] private BuildingData m_upgrade;
 
@@ -22,6 +21,4 @@ public abstract class BuildingData : ScriptableObject
 
     public bool CanBeAfforded()
         => Player.instance.gold >= m_cost;
-    public virtual bool CanBeBuiltOn(HexCell cell)
-        => cell != null && m_requiredTerrain == cell.terrainType && !cell.isOccupied;
 }

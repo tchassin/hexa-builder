@@ -1,22 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(MeshFilter))]
-public class Road : HexCellContent
+public abstract class TilingBuildingData : BuildingData
 {
     private struct CellPatternMesh
     {
         public List<HexDirection> pattern;
         public Mesh mesh;
     }
-    public override TerrainType requiredTerrainType => TerrainType.Ground;
-
-    [SerializeField] private int m_cost;
 
     [Header("Meshes")]
-    [SerializeField] private Mesh m_isolatedRoadMesh;
+    [SerializeField] private Mesh m_singleMesh;
     [Space]
-    [SerializeField] private Mesh m_singleRoadMesh;
+    [SerializeField] private Mesh m_oneWayMesh;
     [Space]
     [SerializeField] private Mesh m_twoWayAcrossMesh;
     [SerializeField] private Mesh m_twoWaySharpTurnMesh;
@@ -27,78 +23,62 @@ public class Road : HexCellContent
     [SerializeField] private Mesh m_threeWaySplitMesh;
     [Space]
     [SerializeField] private Mesh m_fourWayForkRoadMesh;
-    [SerializeField] private Mesh m_fourWayXRoadMesh;
     [SerializeField] private Mesh m_fourWayKRoadMesh;
+    [SerializeField] private Mesh m_fourWayXRoadMesh;
     [Space]
-    [SerializeField] private Mesh m_fiveWayRoadMesh;
+    [SerializeField] private Mesh m_fiveWayMesh;
     [Space]
-    [SerializeField] private Mesh m_sixWayRoadMesh;
+    [SerializeField] private Mesh m_sixWayMesh;
 
-    private MeshFilter m_meshFilter;
-
-    private void Awake()
+    public override void OnInstanceBuilt(Building building)
     {
-        TryGetComponent(out m_meshFilter);
+        base.OnInstanceBuilt(building);
+
+        building.GetNeighborBuildings(this, out List<Building> neighbors);
+
+        UpdateBuildingMesh(building);
+
+        foreach (var neighbor in neighbors)
+            UpdateBuildingMesh(neighbor);
     }
 
-    public List<HexDirection> GetNeighborRoads()
+    public override void OnInstanceDemolished(Building building)
     {
-        var directions = new List<HexDirection>();
+        base.OnInstanceDemolished(building);
 
-        for (int i = 0; i < 6; i++)
-        {
-            if (cell.neighbors[i] != null && cell.neighbors[i].content is Road)
-                directions.Add((HexDirection)i);
-        }
-
-        return directions;
+        building.GetNeighborBuildings(this, out List<Building> neighbors);
+        foreach (var neighbor in neighbors)
+            UpdateBuildingMesh(neighbor);
     }
 
-    public override void OnPlacedOn(HexCell cell)
+    private bool UpdateBuildingMesh(Building building)
     {
-        base.OnPlacedOn(cell);
-
-        UpdateMesh();
-        foreach (var neighbor in cell.neighbors)
+        if (building.meshFilter == null)
         {
-            if (neighbor != null && neighbor.content is Road neighborRoad)
-                neighborRoad.UpdateMesh();
+            Debug.Log($"Missing MeshFilter on {building.name}", building);
+
+            return false;
         }
-    }
 
-    public override void OnRemoved()
-    {
-        base.OnRemoved();
-        foreach (var neighbor in cell.neighbors)
+        building.GetNeighborBuildings(this, out List<HexDirection> directions);
+        if (directions.Count == 6)
         {
-            if (neighbor != null && neighbor.content is Road neighborRoad)
-                neighborRoad.UpdateMesh();
+            building.meshFilter.mesh = m_sixWayMesh;
         }
-    }
-
-    private void UpdateMesh()
-    {
-        Debug.Assert(m_meshFilter != null, this);
-
-        var neighborRoads = GetNeighborRoads();
-        if (neighborRoads.Count == 6)
+        else if (directions.Count == 5)
         {
-            m_meshFilter.mesh = m_sixWayRoadMesh;
-        }
-        else if (neighborRoads.Count == 5)
-        {
-            UpdateRoad(new List<CellPatternMesh>
+            UpdateMesh(new List<CellPatternMesh>
             {
                 new CellPatternMesh
                 {
                     pattern = new List<HexDirection> { HexDirection.E, HexDirection.SE, HexDirection.SW, HexDirection.W, HexDirection.NW },
-                    mesh = m_fiveWayRoadMesh
+                    mesh = m_fiveWayMesh
                 },
             });
         }
-        else if (neighborRoads.Count == 4)
+        else if (directions.Count == 4)
         {
-            UpdateRoad(new List<CellPatternMesh>
+            UpdateMesh(new List<CellPatternMesh>
             {
                 new CellPatternMesh
                 {
@@ -117,9 +97,9 @@ public class Road : HexCellContent
                 },
             });
         }
-        else if (neighborRoads.Count == 3)
+        else if (directions.Count == 3)
         {
-            UpdateRoad(new List<CellPatternMesh>
+            UpdateMesh(new List<CellPatternMesh>
             {
                 new CellPatternMesh
                 {
@@ -138,9 +118,9 @@ public class Road : HexCellContent
                 },
             });
         }
-        else if (neighborRoads.Count == 2)
+        else if (directions.Count == 2)
         {
-            UpdateRoad(new List<CellPatternMesh>
+            UpdateMesh(new List<CellPatternMesh>
             {
                 new CellPatternMesh
                 {
@@ -159,26 +139,26 @@ public class Road : HexCellContent
                 },
             });
         }
-        else if (neighborRoads.Count == 1)
+        else if (directions.Count == 1)
         {
-            m_meshFilter.mesh = m_singleRoadMesh;
-            RotateMeshToward(neighborRoads[0]);
+            building.meshFilter.mesh = m_oneWayMesh;
+            building.RotateMeshToward(directions[0]);
         }
         else
         {
-            m_meshFilter.mesh = m_isolatedRoadMesh;
+            building.meshFilter.mesh = m_singleMesh;
         }
 
-        bool UpdateRoad(List<CellPatternMesh> cellPatterns)
+        bool UpdateMesh(List<CellPatternMesh> cellPatterns)
         {
             foreach (var cellPatternMesh in cellPatterns)
             {
-                if (!neighborRoads.IsPermutationOf(cellPatternMesh.pattern, out int distance, out bool isFlipped))
+                if (!directions.IsPermutationOf(cellPatternMesh.pattern, out int distance, out bool isFlipped))
                     continue;
 
-                m_meshFilter.mesh = cellPatternMesh.mesh;
-                m_meshFilter.transform.localScale = isFlipped ? new Vector3(1, 1, -1) : Vector3.one;
-                RotateMesh(-distance);
+                building.meshFilter.mesh = cellPatternMesh.mesh;
+                building.meshFilter.transform.localScale = isFlipped ? new Vector3(1, 1, -1) : Vector3.one;
+                building.RotateMesh(-distance);
 
                 return true;
             }
@@ -187,15 +167,7 @@ public class Road : HexCellContent
 
             return false;
         }
-    }
 
-    private void RotateMeshToward(HexDirection direction)
-        => RotateMesh(HexDirection.E.DistanceTo(direction));
-
-    private void RotateMesh(int distance)
-    {
-        // Clamp angle to ]-180; 180]
-        int clampedDistance = distance > 3 ? distance - 6 : distance <= -3 ? distance + 6 : distance;
-        m_meshFilter.transform.localEulerAngles = Vector3.up * (clampedDistance * 60.0f);
+        return true;
     }
 }

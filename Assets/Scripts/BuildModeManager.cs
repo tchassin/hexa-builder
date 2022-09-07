@@ -7,7 +7,7 @@ public class BuildModeManager : MonoBehaviour
 
     [Header("Prefabs")]
     [SerializeField] private Building m_buildingPrefab;
-    [SerializeField] private Road m_roadPrefab;
+    [SerializeField] private Building m_roadPrefab;
     [SerializeField] private Prop m_treePrefab;
 
     [Header("Preview")]
@@ -16,7 +16,6 @@ public class BuildModeManager : MonoBehaviour
     [SerializeField] private Color m_invalidPreviewColor = Color.red;
 
     public Building buildingPrefab => m_buildingPrefab;
-    public Road roadPrefab => m_roadPrefab;
     public Prop treePrefab => m_treePrefab;
 
 
@@ -52,7 +51,7 @@ public class BuildModeManager : MonoBehaviour
 
     public bool PlaceBuilding(BuildingData buildingData, HexCell cell)
     {
-        if (!buildingData.CanBeBuiltOn(cell))
+        if (!buildingData.CanBePlacedOn(cell))
             return false;
 
         if (!buildingData.CanBeAfforded())
@@ -82,14 +81,15 @@ public class BuildModeManager : MonoBehaviour
         return true;
     }
 
-    public bool PlaceRoads(List<HexCell> path)
+    public bool PlaceRoads(RoadData roadData, List<HexCell> path)
     {
         foreach (var cell in path)
         {
-            if (!roadPrefab.CanBePlacedOn(cell))
+            if (!roadData.CanBePlacedOn(cell))
                 continue;
 
-            var road = Instantiate(roadPrefab, cell.transform);
+            var road = Instantiate(m_buildingPrefab, cell.transform);
+            road.Initialize(roadData);
             cell.SetContent(road);
         }
 
@@ -124,7 +124,7 @@ public class BuildModeManager : MonoBehaviour
 
         m_preview.transform.position = cell.transform.position;
 
-        bool canBeBuilt = !cell.isOccupied && buildingData.CanBeAfforded() && buildingData.CanBeBuiltOn(cell);
+        bool canBeBuilt = !cell.isOccupied && buildingData.CanBeAfforded() && buildingData.CanBePlacedOn(cell);
 
         if (!m_preview.TryGetComponent(out MeshRenderer meshRenderer))
             return;

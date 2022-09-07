@@ -1,17 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoadClickHandler : IGridClickHandler
+public class RoadModeClickHandler : IGridClickHandler
 {
     private bool isPlacingRoads => m_selectedCells.Count > 0;
 
+    private RoadData m_roadData;
     private HexCell m_start;
     private HexGrid m_grid;
     private GameUI m_gameUI;
     private readonly List<UICell> m_selectedCells = new List<UICell>();
 
-    public RoadClickHandler()
+    public RoadModeClickHandler(RoadData roadData)
     {
+        Debug.Assert(roadData != null);
+        m_roadData = roadData;
         m_grid = Object.FindObjectOfType<HexGrid>();
         m_gameUI = Object.FindObjectOfType<GameUI>();
     }
@@ -32,9 +35,7 @@ public class RoadClickHandler : IGridClickHandler
         foreach (var pathCell in path)
         {
             var uiCell = m_gameUI.GetUICell(pathCell);
-            uiCell.SetState(BuildModeManager.instance.roadPrefab.CanBePlacedOn(cell)
-                ? UICell.State.Selected
-                : UICell.State.Invalid);
+            uiCell.SetState(m_roadData.CanBePlacedOn(pathCell) ? UICell.State.Selected : UICell.State.Invalid);
 
             m_selectedCells.Add(uiCell);
         }
@@ -62,7 +63,7 @@ public class RoadClickHandler : IGridClickHandler
         foreach (var uiCell in m_selectedCells)
             path.Add(uiCell.cell);
 
-        BuildModeManager.instance.PlaceRoads(path);
+        BuildModeManager.instance.PlaceRoads(m_roadData, path);
 
         EndBuildMode();
     }

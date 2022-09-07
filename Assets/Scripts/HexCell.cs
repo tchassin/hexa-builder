@@ -56,6 +56,9 @@ public class HexCell : MonoBehaviour
     {
         m_terrainType = terrainType;
 
+        if (content != null && !content.CanBePlacedOn(this))
+            SetContent(null);
+
         // Set height
         float cellHeight = (terrainType == TerrainType.Ground) ? 1.0f : 0.8f;
         transform.localScale = new Vector3(1.0f, cellHeight, 1.0f);
@@ -76,14 +79,17 @@ public class HexCell : MonoBehaviour
         Debug.Assert(m_content != content, this);
         Debug.Assert(m_content == null || content == null, this);
 
-        if (m_content != null)
+        var previousContent = m_content;
+        m_content = content;
+
+        if (previousContent != null)
         {
-            m_content.OnRemoved();
-            Destroy(content.gameObject);
+            previousContent.OnRemoved();
+            Destroy(previousContent.gameObject);
         }
 
-        m_content = content;
-        m_content.OnPlacedOn(this);
+        if (m_content != null)
+            m_content.OnPlacedOn(this);
     }
 
     public int DistanceTo(HexCell other)

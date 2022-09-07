@@ -60,9 +60,13 @@ public class GameUI : MonoBehaviour
         m_clickHandler = isEnabled ? new TerrainClickHandler() : null;
     }
 
-    public void ToggleBuildRoadMode(bool isEnabled)
+    public void ToggleBuildRoadMode(RoadData roadData)
     {
-        m_clickHandler = isEnabled ? new RoadClickHandler() : null;
+        m_clickHandler = roadData != null
+            ? m_clickHandler is BuildModeClickHandler builder && builder.buildingData == roadData
+                ? null
+                : new RoadModeClickHandler(roadData)
+            : null;
     }
     public void ToggleAddTreeMode(bool isEnabled)
     {

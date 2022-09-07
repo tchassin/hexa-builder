@@ -254,7 +254,7 @@ PrefabInstance:
     - target: {fileID: 7541487398242455079, guid: a879209ba8b6ba44f9910333c6131b04,
         type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7541487398242455079, guid: a879209ba8b6ba44f9910333c6131b04,
         type: 3}
@@ -288,8 +288,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7541487398242455079, guid: a879209ba8b6ba44f9910333c6131b04,
         type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 11400000, guid: ae1c4f92e7026d943b152073a30bacda,
+        type: 2}
+    - target: {fileID: 7541487398242455079, guid: a879209ba8b6ba44f9910333c6131b04,
+        type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
+      value: RoadData, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7541487398752970261, guid: a879209ba8b6ba44f9910333c6131b04,
         type: 3}
