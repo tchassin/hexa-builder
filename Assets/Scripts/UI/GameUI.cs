@@ -8,9 +8,10 @@ public class GameUI : MonoBehaviour
     [SerializeField] private Canvas m_gridCanvas;
 
     [Header("Label")]
-    [SerializeField] private TextMeshProUGUI m_goldLabel;
     [SerializeField] private TextMeshProUGUI m_populationLabel;
     [SerializeField] private TextMeshProUGUI m_jobsLabel;
+    [SerializeField] private TextMeshProUGUI m_goldLabel;
+    [SerializeField] private TextMeshProUGUI m_woodLabel;
 
     private readonly List<UICell> m_uiCells = new List<UICell>();
     private IGridClickHandler m_clickHandler;
@@ -27,6 +28,10 @@ public class GameUI : MonoBehaviour
 
         if (m_jobsLabel)
             m_jobsLabel.text = $"{Player.instance.assignedJobs}/{Player.instance.totalJobs}";
+
+        // TODO: proper resource display
+        if (m_woodLabel)
+            m_woodLabel.text = $"{(Player.instance.resources.Count > 0 ? Player.instance.resources[0].count : 0)}";
 
         if (m_clickHandler == null)
             return;
