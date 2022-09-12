@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -5,8 +6,11 @@ public class Player : MonoBehaviour
     public static Player instance { get; private set; }
 
     [SerializeField] private int m_gold;
+    [SerializeField] private List<ResourceNumber> m_resources;
 
     public int gold => m_gold;
+    public List<ResourceNumber> resources => m_resources;
+
     public int population => m_population;
     public int maxPopulation => m_maxPopulation;
     public int idlePopulation => population - assignedJobs;
