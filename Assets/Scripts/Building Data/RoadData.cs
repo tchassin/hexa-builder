@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Building Data/Road")]
+[CreateAssetMenu(menuName = "Data/Building/Road")]
 public class RoadData : TilingBuildingData
 {
 }

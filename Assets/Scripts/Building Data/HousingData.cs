@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Building Data/Housing")]
+[CreateAssetMenu(menuName = "Data/Building/Housing")]
 public class HousingData : BuildingData
 {
     [SerializeField] private int m_capacity;
