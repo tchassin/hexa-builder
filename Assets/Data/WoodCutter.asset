@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0f8fc5595303c44bbaef67795da2dfc, type: 3}
+  m_Name: WoodCutter
+  m_EditorClassIdentifier: 
+  m_requiredTerrain: 1
+  m_cost: 10
+  m_buildingPrefab: {fileID: 919132149155446097, guid: 5984a7bbfcf2cd840a5cde2d93d4738f,
+    type: 3}
+  m_upgrade: {fileID: 0}
+  m_productionTime: 3
+  m_minWorkers: 2
+  m_maxWorkers: 5
+  m_input:
+    resource: {fileID: 0}
+    count: 0
+  m_output:
+    resource: {fileID: 11400000, guid: dfa640970fe2a854e9f7d36a7da3b0f3, type: 2}
+    count: 1
