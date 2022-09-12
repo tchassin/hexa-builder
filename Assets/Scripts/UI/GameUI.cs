@@ -22,7 +22,7 @@ public class GameUI : MonoBehaviour
             m_goldLabel.text = Player.instance.gold.ToString();
 
         if (m_populationLabel)
-            m_populationLabel.text = Player.instance.population.ToString();
+            m_populationLabel.text = $"{Player.instance.population}/{Player.instance.maxPopulation}";
 
         if (m_clickHandler == null)
             return;

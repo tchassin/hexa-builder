@@ -5,7 +5,11 @@ public class Building : HexCellContent
 {
     public int upgradeCount => m_upgradePath.Count;
     public bool canBeDowngraded => upgradeCount > 1;
-    public BuildingData data => m_upgradePath.Peek();
+    public BuildingData data => m_upgradePath.Count > 0 ? m_upgradePath.Peek() : null;
+    public float progress { get; set; }
+    public int workers => m_workers;
+    public int maxWorkers => data != null ? data.maxWorkers : 0;
+    public List<ResourceNumber> storedResources => m_storedResources;
 
     public override TerrainType requiredTerrainType => TerrainType.Ground;
     public MeshFilter meshFilter => m_meshFilter;
@@ -13,6 +17,37 @@ public class Building : HexCellContent
     private GameObject m_model;
     private MeshFilter m_meshFilter;
     private readonly Stack<BuildingData> m_upgradePath = new Stack<BuildingData>();
+    private readonly List<ResourceNumber> m_storedResources = new List<ResourceNumber>();
+    private int m_workers = 0;
+
+    private void Update()
+    {
+        if (data == null)
+            return;
+
+        data.OnInstanceUpdated(this);
+    }
+
+    public void AddWorkers(int workers)
+    {
+        Debug.Assert(m_workers + workers <= maxWorkers, $"Invalid worker number: {m_workers + workers}/{maxWorkers}", this);
+        m_workers += workers;
+
+        if (data is HousingData)
+            Player.instance.AddPopulation(workers);
+        else
+            Player.instance.AssignWorkers(workers);
+    }
+    public void RemoveWorkers(int workers)
+    {
+        Debug.Assert(workers <= m_workers, $"Invalid worker number: {workers}/{m_workers}", this);
+        m_workers -= workers;
+
+        if (data is HousingData)
+            Player.instance.RemovePopulation(workers);
+        else
+            Player.instance.FreeWorkers(workers);
+    }
 
     public void Initialize(BuildingData data)
     {
@@ -75,6 +110,8 @@ public class Building : HexCellContent
 
     public override void OnRemoved()
     {
+        RemoveWorkers(workers);
+
         if (data)
             data.OnInstanceDemolished(this);
     }
@@ -91,6 +128,7 @@ public class Building : HexCellContent
 
         m_upgradePath.Pop();
         OnDataChanged();
+
         Player.instance.UseGold(data.cost);
 
         data.OnInstanceUpgradedTo(this);

@@ -10,6 +10,7 @@ public abstract class BuildingData : CellContentData
     public GameObject buildingPrefab => m_buildingPrefab;
     public BuildingData upgrade => m_upgrade;
     public bool hasUpgrade => m_upgrade != null;
+    public virtual int maxWorkers => 0;
 
     public virtual void OnInstanceBuilt(Building building) { }
     public virtual void OnInstanceDemolished(Building building) { }

@@ -8,8 +8,20 @@ public class Player : MonoBehaviour
 
     public int gold => m_gold;
     public int population => m_population;
+    public int maxPopulation => m_maxPopulation;
+    public int idlePopulation => population - assignedJobs;
+
+    public int assignedJobs => m_assignedJobs;
+    public int totalJobs => m_totalJobs;
+    public int unassignedJobs => totalJobs - assignedJobs;
+
+    public float unassignedJobRate => m_totalJobs > 0 ? (float)unassignedJobs / m_totalJobs : 0;
 
     private int m_population = 0;
+    private int m_maxPopulation = 0;
+
+    private int m_assignedJobs = 0;
+    private int m_totalJobs = 0;
 
     private void Awake()
     {
@@ -33,18 +45,62 @@ public class Player : MonoBehaviour
         return true;
     }
 
-    public void IncreasePopulation(int population)
+    public void IncreaseMaxPopulation(int value)
     {
-        m_population += population;
+        Debug.Assert(value >= 0, this);
+        m_maxPopulation += value;
     }
 
-    public bool DecreasePopulation(int population)
+    public void DecreaseMaxPopulation(int value)
     {
-        if (population > m_population)
+        Debug.Assert(value >= 0, this);
+        Debug.Assert(value <= maxPopulation, this);
+        Debug.Assert(population <= maxPopulation - value, this);
+        m_maxPopulation -= value;
+    }
+
+    public void AddPopulation(int value)
+    {
+        Debug.Assert(value >= 0, this);
+        Debug.Assert(m_population + value <= maxPopulation, this);
+        m_population += value;
+    }
+
+    public bool RemovePopulation(int value)
+    {
+        Debug.Assert(value >= 0, this);
+        Debug.Assert(m_population - value >= 0, this);
+        if (value > m_population)
             return false;
 
-        m_population -= population;
+        m_population -= value;
 
         return true;
+    }
+
+    public void AddJobs(int value)
+    {
+        Debug.Assert(value >= 0, this);
+        m_totalJobs += value;
+    }
+
+    public void RemoveJobs(int value)
+    {
+        Debug.Assert(value >= 0, this);
+        Debug.Assert(value <= m_totalJobs, this);
+        Debug.Assert(assignedJobs <= m_totalJobs - value, this);
+        m_totalJobs -= value;
+    }
+
+    public void AssignWorkers(int value)
+    {
+        Debug.Assert(value >= 0, this);
+        m_assignedJobs += value;
+    }
+
+    public void FreeWorkers(int value)
+    {
+        Debug.Assert(value >= 0, this);
+        m_assignedJobs -= value;
     }
 }
