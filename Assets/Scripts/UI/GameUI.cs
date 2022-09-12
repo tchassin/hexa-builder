@@ -10,6 +10,7 @@ public class GameUI : MonoBehaviour
     [Header("Label")]
     [SerializeField] private TextMeshProUGUI m_goldLabel;
     [SerializeField] private TextMeshProUGUI m_populationLabel;
+    [SerializeField] private TextMeshProUGUI m_jobsLabel;
 
     private readonly List<UICell> m_uiCells = new List<UICell>();
     private IGridClickHandler m_clickHandler;
@@ -23,6 +24,9 @@ public class GameUI : MonoBehaviour
 
         if (m_populationLabel)
             m_populationLabel.text = $"{Player.instance.population}/{Player.instance.maxPopulation}";
+
+        if (m_jobsLabel)
+            m_jobsLabel.text = $"{Player.instance.assignedJobs}/{Player.instance.totalJobs}";
 
         if (m_clickHandler == null)
             return;
