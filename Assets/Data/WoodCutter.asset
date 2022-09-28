@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_requiredTerrain: 1
   m_cost: 10
-  m_buildingPrefab: {fileID: 919132149155446097, guid: 5984a7bbfcf2cd840a5cde2d93d4738f,
+  m_buildingPrefab: {fileID: 919132149155446097, guid: a31c294d86c195d4f9cad0b087b50d65,
     type: 3}
   m_upgrade: {fileID: 0}
   m_productionTime: 3
