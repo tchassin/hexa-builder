@@ -6,6 +6,9 @@ ModelImporter:
   - first:
       74: 6214377197099054324
     second: Windmill|Idle
+  - first:
+      74: 1743248970431498279
+    second: Helix|HelixAction
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -36,11 +39,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Windmill|Idle
-      takeName: Rotor|RotorAction
+      name: Helix|HelixAction
+      takeName: Helix|HelixAction
       internalID: 0
       firstFrame: 0
-      lastFrame: 150
+      lastFrame: 149
       wrapMode: 2
       orientationOffsetY: 0
       level: 0
