@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e8d8993ec800b3c4da13a76f7e243423, type: 3}
-  m_Name: House_Lv1
+  m_Name: House
   m_EditorClassIdentifier: 
   m_cost: 0
   m_requiredTerrain: 1
