@@ -11,7 +11,7 @@ public class BuildModeClickHandler : IGridClickHandler
         Debug.Assert(buildingData != null);
         m_buildingData = buildingData;
 
-        BuildModeManager.instance.EnterBuildMode(m_buildingData.buildingPrefab);
+        BuildModeManager.instance.EnterBuildMode(m_buildingData.buildingPrefab, m_buildingData.GetFacingDirection());
     }
 
     ~BuildModeClickHandler()

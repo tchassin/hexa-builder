@@ -17,6 +17,8 @@ MonoBehaviour:
   m_buildingPrefab: {fileID: 919132149155446097, guid: a31c294d86c195d4f9cad0b087b50d65,
     type: 3}
   m_upgrade: {fileID: 0}
+  m_hasFacingDirection: 1
+  m_facingDirection: 2
   m_productionTime: 3
   m_minWorkers: 2
   m_maxWorkers: 5

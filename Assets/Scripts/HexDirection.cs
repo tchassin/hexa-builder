@@ -105,6 +105,29 @@ public static class DirectionExtensions
         return (HexDirection)rotated;
     }
 
+    public static float ToAngle(this HexDirection direction)
+    {
+        int distance = (int)direction;
+
+        return DistanceToAngle(distance);
+    }
+
+    public static float AngleTo(this HexDirection direction, HexDirection otherDirection)
+    {
+        int distance = direction.DistanceTo(otherDirection);
+
+        return DistanceToAngle(distance);
+    }
+
+    public static float DistanceToAngle(int distance)
+    {
+        // Clamp angle to ]-180; 180]
+        int angle = distance % 6;
+        int clampedAngle = angle > 3 ? angle - 6 : angle <= -3 ? angle + 6 : angle;
+
+        return clampedAngle * 60.0f;
+    }
+
     public static HexCoordinates ToOffest(this HexDirection direction) => direction switch
     {
         HexDirection.E => HexCoordinates.east,

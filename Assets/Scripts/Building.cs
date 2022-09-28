@@ -12,10 +12,6 @@ public class Building : HexCellContent
     public List<ResourceNumber> storedResources => m_storedResources;
 
     public override TerrainType requiredTerrainType => TerrainType.Ground;
-    public MeshFilter meshFilter => m_meshFilter;
-
-    private GameObject m_model;
-    private MeshFilter m_meshFilter;
     private readonly Stack<BuildingData> m_upgradePath = new Stack<BuildingData>();
     private readonly List<ResourceNumber> m_storedResources = new List<ResourceNumber>();
     private int m_workers = 0;
@@ -146,32 +142,9 @@ public class Building : HexCellContent
 
         data.OnInstanceDowngradedTo(this);
     }
-
-    public void RotateMeshToward(HexDirection direction)
-        => RotateMesh(HexDirection.E.DistanceTo(direction));
-
-    public void RotateMesh(int distance)
-    {
-        // Clamp angle to ]-180; 180]
-        int clampedDistance = distance > 3 ? distance - 6 : distance <= -3 ? distance + 6 : distance;
-        m_meshFilter.transform.localEulerAngles = Vector3.up * (clampedDistance * 60.0f);
-    }
-
     private void OnDataChanged()
     {
         Debug.Assert(data != null, this);
-
-        if (m_model != null)
-        {
-            Destroy(m_model);
-            m_meshFilter = null;
-        }
-
-        if (data.buildingPrefab != null)
-        {
-            m_model = Instantiate(data.buildingPrefab, transform);
-            m_model.TryGetComponent(out m_meshFilter);
-        }
-
+        UpdateModel(data.buildingPrefab);
     }
 }

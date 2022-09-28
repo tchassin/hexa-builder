@@ -28,7 +28,7 @@ public class BuildModeManager : MonoBehaviour
         m_grid = FindObjectOfType<HexGrid>();
     }
 
-    public void EnterBuildMode(GameObject previewPrefab)
+    public void EnterBuildMode(GameObject previewPrefab, HexDirection facingDirection)
     {
         Debug.Assert(m_grid != null);
         Debug.Assert(previewPrefab != null);
@@ -36,7 +36,8 @@ public class BuildModeManager : MonoBehaviour
         if (m_preview != null)
             Destroy(m_preview);
 
-        m_preview = Instantiate(previewPrefab, Vector3.zero, Quaternion.Euler(0, -120.0f, 0), m_grid.transform);
+        Quaternion previewRotation = Quaternion.Euler(0, facingDirection.ToAngle(), 0);
+        m_preview = Instantiate(previewPrefab, Vector3.zero, previewRotation, m_grid.transform);
 
         var meshRenderers = new List<MeshRenderer>();
         m_preview.GetComponentsInChildren(meshRenderers);
@@ -62,7 +63,7 @@ public class BuildModeManager : MonoBehaviour
 
         var building = Instantiate(m_buildingPrefab, cell.transform);
         building.Initialize(buildingData);
-        building.RotateMesh(Random.Range(-2, 3));
+        building.RotateMeshToward(buildingData.GetFacingDirection());
         cell.SetContent(building);
 
         Player.instance.UseGold(buildingData.cost);

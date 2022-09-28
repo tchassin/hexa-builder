@@ -10,7 +10,7 @@ public class PropsClickHandler : IGridClickHandler
     {
         Debug.Assert(propPrefab != null);
         m_propPrefab = propPrefab;
-        BuildModeManager.instance.EnterBuildMode(propPrefab.gameObject);
+        BuildModeManager.instance.EnterBuildMode(propPrefab.gameObject, (HexDirection)Random.Range(0, 6));
     }
 
     ~PropsClickHandler()
