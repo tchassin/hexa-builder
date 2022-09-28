@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public abstract class BuildingData : CellContentData
+[CreateAssetMenu(menuName = "Data/Building/Basic")]
+public class BuildingData : CellContentData
 {
     [SerializeField] private int m_cost;
     [SerializeField] private GameObject m_buildingPrefab;
