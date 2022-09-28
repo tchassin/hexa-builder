@@ -1,15 +1,16 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Data/Building/Basic")]
 public class BuildingData : CellContentData
 {
-    [SerializeField] private int m_cost;
+    [SerializeField] private List<ResourceNumber> m_resourceCost;
     [SerializeField] private GameObject m_buildingPrefab;
     [SerializeField] private BuildingData m_upgrade;
     [SerializeField] private bool m_hasFacingDirection;
     [SerializeField] private HexDirection m_facingDirection;
 
-    public int cost => m_cost;
+    public List<ResourceNumber> resourceCost => m_resourceCost;
     public GameObject buildingPrefab => m_buildingPrefab;
     public BuildingData upgrade => m_upgrade;
     public bool hasUpgrade => m_upgrade != null;
@@ -27,5 +28,5 @@ public class BuildingData : CellContentData
     public virtual void OnInstanceUpdated(Building building) { }
 
     public bool CanBeAfforded()
-        => Player.instance.gold >= m_cost;
+        => Player.instance.resources.HasResources(m_resourceCost);
 }

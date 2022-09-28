@@ -66,7 +66,7 @@ public class BuildModeManager : MonoBehaviour
         building.RotateMeshToward(buildingData.GetFacingDirection());
         cell.SetContent(building);
 
-        Player.instance.UseGold(buildingData.cost);
+        Player.instance.resources.UseResources(buildingData.resourceCost);
 
         m_preview.SetActive(false);
 
@@ -89,23 +89,20 @@ public class BuildModeManager : MonoBehaviour
 
     public bool PlaceRoads(RoadData roadData, List<HexCell> path)
     {
-        int totalCost = 0;
         foreach (var cell in path)
         {
             if (!roadData.CanBePlacedOn(cell))
                 continue;
 
-            if (Player.instance.gold < totalCost + roadData.cost)
+            if (!Player.instance.resources.HasResources(roadData.resourceCost))
                 break;
 
             var road = Instantiate(m_buildingPrefab, cell.transform);
             road.Initialize(roadData);
             cell.SetContent(road);
 
-            totalCost += roadData.cost;
+            Player.instance.resources.UseResources(roadData.resourceCost);
         }
-
-        Player.instance.UseGold(totalCost);
 
         return true;
     }

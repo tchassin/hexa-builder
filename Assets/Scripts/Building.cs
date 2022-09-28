@@ -9,11 +9,11 @@ public class Building : HexCellContent
     public float progress { get; set; }
     public int workers => m_workers;
     public int maxWorkers => data != null ? data.maxWorkers : 0;
-    public List<ResourceNumber> storedResources => m_storedResources;
+    public ResourceStorage storedResources => m_storedResources;
 
     public override TerrainType requiredTerrainType => TerrainType.Ground;
     private readonly Stack<BuildingData> m_upgradePath = new Stack<BuildingData>();
-    private readonly List<ResourceNumber> m_storedResources = new List<ResourceNumber>();
+    private readonly ResourceStorage m_storedResources = new ResourceStorage();
     private int m_workers = 0;
 
     private void Update()
@@ -125,7 +125,7 @@ public class Building : HexCellContent
         m_upgradePath.Pop();
         OnDataChanged();
 
-        Player.instance.UseGold(data.cost);
+        Player.instance.resources.UseResources(data.resourceCost);
 
         data.OnInstanceUpgradedTo(this);
     }

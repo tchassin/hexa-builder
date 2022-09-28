@@ -45,28 +45,16 @@ public class ProductionBuildingData : BuildingData
 
             // Output directly to player resources for now
             // FIXME: Output resource to storage
-            if (m_output != null && m_output.resource != null)
-            {
-                var storedOutput = Player.instance.resources.Find(m_output.IsSameResource);
-                if (storedOutput != null)
-                {
-                    storedOutput.count += m_output.count;
-                }
-                else
-                {
-                    storedOutput = new ResourceNumber { resource = m_output.resource, count = m_output.count };
-                    Player.instance.resources.Add(storedOutput);
-                }
-            }
+            if (m_output.resource != null)
+                Player.instance.resources.AddResource(m_output);
         }
 
 
         // Take input from storage if necessary and possible
-        if (m_input != null && m_input.resource != null)
+        if (m_input.resource != null)
         {
             // Check that we have enough input resource to process
-            var storedInput = building.storedResources.Find(m_input.IsSameResource);
-            if (storedInput == null || storedInput.count < m_input.count)
+            if (!building.storedResources.HasResource(m_input))
             {
                 // Reset progress if a production cycle can't be started
                 building.progress = 0.0f;
@@ -75,7 +63,7 @@ public class ProductionBuildingData : BuildingData
             }
 
             // Consume input resource and start new production cycle
-            storedInput.count -= m_input.count;
+            building.storedResources.UseResource(m_input);
         }
 
         building.progress = building.progress >= 1.0f

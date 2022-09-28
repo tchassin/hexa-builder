@@ -1,15 +1,12 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     public static Player instance { get; private set; }
 
-    [SerializeField] private int m_gold;
-    [SerializeField] private List<ResourceNumber> m_resources;
+    [SerializeField] private ResourceStorage m_resources;
 
-    public int gold => m_gold;
-    public List<ResourceNumber> resources => m_resources;
+    public ResourceStorage resources => m_resources;
 
     public int population => m_population;
     public int maxPopulation => m_maxPopulation;
@@ -33,20 +30,6 @@ public class Player : MonoBehaviour
             instance = this;
         else
             Destroy(gameObject);
-    }
-
-    public void AddGold(int gold)
-    {
-        m_gold += gold;
-    }
-
-    public bool UseGold(int gold)
-    {
-        Debug.Assert(gold <= m_gold, this);
-
-        m_gold -= gold;
-
-        return true;
     }
 
     public void IncreaseMaxPopulation(int value)

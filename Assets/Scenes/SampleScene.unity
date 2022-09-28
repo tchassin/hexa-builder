@@ -1625,8 +1625,11 @@ MonoBehaviour:
   m_gridCanvas: {fileID: 1208879835}
   m_populationLabel: {fileID: 400010746}
   m_jobsLabel: {fileID: 1378524416}
+  m_gold: {fileID: 11400000, guid: dee38a74798d37842b4cbfcc6dcf75cf, type: 2}
   m_goldLabel: {fileID: 551636794}
+  m_wood: {fileID: 11400000, guid: dfa640970fe2a854e9f7d36a7da3b0f3, type: 2}
   m_woodLabel: {fileID: 1954944167}
+  m_food: {fileID: 11400000, guid: 6f28ee30571cfc147a18452ae1735dd5, type: 2}
   m_foodLabel: {fileID: 1112084040}
 --- !u!224 &1052507110 stripped
 RectTransform:
@@ -2465,8 +2468,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf4676d457bc0cd4fbfd211c3609e095, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_gold: 100
-  m_resources: []
+  m_resources:
+    m_resources:
+    - m_resource: {fileID: 11400000, guid: dee38a74798d37842b4cbfcc6dcf75cf, type: 2}
+      m_count: 250
+    - m_resource: {fileID: 11400000, guid: dfa640970fe2a854e9f7d36a7da3b0f3, type: 2}
+      m_count: 20
+    - m_resource: {fileID: 11400000, guid: 6f28ee30571cfc147a18452ae1735dd5, type: 2}
+      m_count: 0
 --- !u!4 &1530921316
 Transform:
   m_ObjectHideFlags: 0

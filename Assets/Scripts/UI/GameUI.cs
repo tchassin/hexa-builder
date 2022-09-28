@@ -7,11 +7,16 @@ public class GameUI : MonoBehaviour
     [SerializeField] private UICell m_uiCellPrefab;
     [SerializeField] private Canvas m_gridCanvas;
 
-    [Header("Label")]
+    [Header("Population")]
     [SerializeField] private TextMeshProUGUI m_populationLabel;
     [SerializeField] private TextMeshProUGUI m_jobsLabel;
+
+    [Header("Resources")]
+    [SerializeField] private ResourceData m_gold;
     [SerializeField] private TextMeshProUGUI m_goldLabel;
+    [SerializeField] private ResourceData m_wood;
     [SerializeField] private TextMeshProUGUI m_woodLabel;
+    [SerializeField] private ResourceData m_food;
     [SerializeField] private TextMeshProUGUI m_foodLabel;
 
     private readonly List<UICell> m_uiCells = new List<UICell>();
@@ -21,9 +26,6 @@ public class GameUI : MonoBehaviour
 
     private void Update()
     {
-        if (m_goldLabel)
-            m_goldLabel.text = Player.instance.gold.ToString();
-
         if (m_populationLabel)
             m_populationLabel.text = $"{Player.instance.population}/{Player.instance.maxPopulation}";
 
@@ -31,11 +33,14 @@ public class GameUI : MonoBehaviour
             m_jobsLabel.text = $"{Player.instance.assignedJobs}/{Player.instance.totalJobs}";
 
         // TODO: proper resource display
-        if (m_woodLabel)
-            m_woodLabel.text = $"{(Player.instance.resources.Count > 0 ? Player.instance.resources[0].count : 0)}";
+        if (m_goldLabel != null && m_gold != null)
+            m_goldLabel.text = $"{Player.instance.resources.GetResource(m_gold)}";
 
-        if (m_foodLabel)
-            m_foodLabel.text = $"{(Player.instance.resources.Count > 1 ? Player.instance.resources[1].count : 0)}";
+        if (m_woodLabel != null && m_wood != null)
+            m_woodLabel.text = $"{Player.instance.resources.GetResource(m_wood)}";
+
+        if (m_foodLabel != null && m_food != null)
+            m_foodLabel.text = $"{Player.instance.resources.GetResource(m_food)}";
 
         if (m_clickHandler == null)
             return;
