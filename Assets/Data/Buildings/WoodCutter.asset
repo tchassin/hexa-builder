@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: WoodCutter
   m_EditorClassIdentifier: 
   m_requiredTerrain: 1
-  m_cost: 10
+  m_resourceCost:
+  - m_resource: {fileID: 11400000, guid: dee38a74798d37842b4cbfcc6dcf75cf, type: 2}
+    m_count: 20
+  - m_resource: {fileID: 11400000, guid: dfa640970fe2a854e9f7d36a7da3b0f3, type: 2}
+    m_count: 3
   m_buildingPrefab: {fileID: 919132149155446097, guid: a31c294d86c195d4f9cad0b087b50d65,
     type: 3}
   m_upgrade: {fileID: 0}
@@ -23,8 +27,8 @@ MonoBehaviour:
   m_minWorkers: 2
   m_maxWorkers: 5
   m_input:
-    resource: {fileID: 0}
-    count: 0
+    m_resource: {fileID: 0}
+    m_count: 0
   m_output:
-    resource: {fileID: 11400000, guid: dfa640970fe2a854e9f7d36a7da3b0f3, type: 2}
-    count: 1
+    m_resource: {fileID: 11400000, guid: dfa640970fe2a854e9f7d36a7da3b0f3, type: 2}
+    m_count: 1
