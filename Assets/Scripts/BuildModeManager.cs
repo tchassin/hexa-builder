@@ -37,9 +37,11 @@ public class BuildModeManager : MonoBehaviour
             Destroy(m_preview);
 
         m_preview = Instantiate(previewPrefab, Vector3.zero, Quaternion.Euler(0, -120.0f, 0), m_grid.transform);
-        if (m_preview.TryGetComponent(out MeshRenderer meshRenderer))
-            meshRenderer.material = m_previewMaterial;
 
+        var meshRenderers = new List<MeshRenderer>();
+        m_preview.GetComponentsInChildren(meshRenderers);
+        foreach (var meshRenderer in meshRenderers)
+            meshRenderer.material = m_previewMaterial;
 
         m_preview.SetActive(false);
     }
@@ -117,14 +119,16 @@ public class BuildModeManager : MonoBehaviour
 
         bool canBePlaced = !cell.isOccupied && content.CanBePlacedOn(cell);
 
-        if (!m_preview.TryGetComponent(out MeshRenderer meshRenderer))
-            return;
-
-        var properties = new MaterialPropertyBlock();
-        if (meshRenderer.HasPropertyBlock())
-            meshRenderer.GetPropertyBlock(properties);
-        properties.SetColor("_Color", canBePlaced ? m_previewColor : m_invalidPreviewColor);
-        meshRenderer.SetPropertyBlock(properties);
+        var meshRenderers = new List<MeshRenderer>();
+        m_preview.GetComponentsInChildren(meshRenderers);
+        foreach (var meshRenderer in meshRenderers)
+        {
+            var properties = new MaterialPropertyBlock();
+            if (meshRenderer.HasPropertyBlock())
+                meshRenderer.GetPropertyBlock(properties);
+            properties.SetColor("_Color", canBePlaced ? m_previewColor : m_invalidPreviewColor);
+            meshRenderer.SetPropertyBlock(properties);
+        }
     }
 
     public void UpdatePreview(BuildingData buildingData, HexCell cell)
@@ -137,13 +141,15 @@ public class BuildModeManager : MonoBehaviour
 
         bool canBeBuilt = !cell.isOccupied && buildingData.CanBeAfforded() && buildingData.CanBePlacedOn(cell);
 
-        if (!m_preview.TryGetComponent(out MeshRenderer meshRenderer))
-            return;
-
-        var properties = new MaterialPropertyBlock();
-        if (meshRenderer.HasPropertyBlock())
-            meshRenderer.GetPropertyBlock(properties);
-        properties.SetColor("_Color", canBeBuilt ? m_previewColor : m_invalidPreviewColor);
-        meshRenderer.SetPropertyBlock(properties);
+        var meshRenderers = new List<MeshRenderer>();
+        m_preview.GetComponentsInChildren(meshRenderers);
+        foreach (var meshRenderer in meshRenderers)
+        {
+            var properties = new MaterialPropertyBlock();
+            if (meshRenderer.HasPropertyBlock())
+                meshRenderer.GetPropertyBlock(properties);
+            properties.SetColor("_Color", canBeBuilt ? m_previewColor : m_invalidPreviewColor);
+            meshRenderer.SetPropertyBlock(properties);
+        }
     }
 }
