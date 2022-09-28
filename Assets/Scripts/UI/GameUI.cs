@@ -12,6 +12,7 @@ public class GameUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI m_jobsLabel;
     [SerializeField] private TextMeshProUGUI m_goldLabel;
     [SerializeField] private TextMeshProUGUI m_woodLabel;
+    [SerializeField] private TextMeshProUGUI m_foodLabel;
 
     private readonly List<UICell> m_uiCells = new List<UICell>();
     private IGridClickHandler m_clickHandler;
@@ -32,6 +33,9 @@ public class GameUI : MonoBehaviour
         // TODO: proper resource display
         if (m_woodLabel)
             m_woodLabel.text = $"{(Player.instance.resources.Count > 0 ? Player.instance.resources[0].count : 0)}";
+
+        if (m_foodLabel)
+            m_foodLabel.text = $"{(Player.instance.resources.Count > 1 ? Player.instance.resources[1].count : 0)}";
 
         if (m_clickHandler == null)
             return;
