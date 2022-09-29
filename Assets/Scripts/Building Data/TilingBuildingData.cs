@@ -34,7 +34,7 @@ public abstract class TilingBuildingData : BuildingData
     {
         base.OnInstanceBuilt(building);
 
-        building.GetNeighborBuildings(this, out List<Building> neighbors);
+        building.cell.GetNeighbors(this, out List<Building> neighbors);
 
         UpdateBuildingMesh(building);
 
@@ -46,7 +46,7 @@ public abstract class TilingBuildingData : BuildingData
     {
         base.OnInstanceDemolished(building);
 
-        building.GetNeighborBuildings(this, out List<Building> neighbors);
+        building.cell.GetNeighbors(this, out List<Building> neighbors);
         foreach (var neighbor in neighbors)
             UpdateBuildingMesh(neighbor);
     }
@@ -60,7 +60,7 @@ public abstract class TilingBuildingData : BuildingData
             return false;
         }
 
-        building.GetNeighborBuildings(this, out List<HexDirection> directions);
+        building.cell.GetNeighborDirections(this, out List<HexDirection> directions);
         if (directions.Count == 6)
         {
             building.meshFilter.mesh = m_sixWayMesh;

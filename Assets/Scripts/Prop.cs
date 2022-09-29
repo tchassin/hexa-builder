@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Prop : HexCellContent
 {
-    [SerializeField] private TerrainType m_requiredTerrainType;
+    [SerializeField] private PropData m_data;
 
-    public override TerrainType requiredTerrainType => m_requiredTerrainType;
+    public override CellContentData data => m_data;
 }

@@ -108,6 +108,42 @@ public class HexCell : MonoBehaviour
         m_neighbors[index] = neighbor;
     }
 
-    public HexCell GetNeighbor(HexDirection direction)
-        => m_neighbors[(int)direction];
+    public void GetNeighbors<ContentType>(out List<ContentType> neighborContent)
+        where ContentType : HexCellContent
+    {
+        neighborContent = new List<ContentType>();
+
+        for (int i = 0; i < 6; i++)
+        {
+            if (m_neighbors[i] != null && m_neighbors[i].content is ContentType content)
+                neighborContent.Add(content);
+        }
+    }
+
+    public void GetNeighbors<DataType, ContentType>(DataType data, out List<ContentType> neighborContent)
+        where DataType : CellContentData
+        where ContentType : HexCellContent
+    {
+        neighborContent = new List<ContentType>();
+
+        for (int i = 0; i < 6; i++)
+        {
+
+            if (m_neighbors[i] != null && m_neighbors[i].content is ContentType content && content.data == data)
+                neighborContent.Add(content);
+        }
+    }
+
+    public void GetNeighborDirections<DataType>(DataType data, out List<HexDirection> directions)
+        where DataType : CellContentData
+    {
+        directions = new List<HexDirection>();
+
+        for (int i = 0; i < 6; i++)
+        {
+            if (m_neighbors[i] != null && m_neighbors[i].content != null && m_neighbors[i].content.data == data)
+                directions.Add((HexDirection)i);
+        }
+    }
+
 }

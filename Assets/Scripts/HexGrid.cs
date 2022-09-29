@@ -69,7 +69,6 @@ public class HexGrid : MonoBehaviour
             if (current == end)
                 return ReconstructPath(end);
 
-            //bool hasPrevious = previousCells.TryGetValue(current, out var previous);
             foreach (var neighbor in current.neighbors)
             {
                 if (neighbor == null)
