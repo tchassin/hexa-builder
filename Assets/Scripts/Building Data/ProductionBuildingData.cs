@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Data/Building/Production")]
@@ -13,7 +14,30 @@ public class ProductionBuildingData : BuildingData
     [SerializeField] private ResourceNumber m_input;
     [SerializeField] private ResourceNumber m_output;
 
+    [Header("Required props & building")]
+    [SerializeField] private CellContentData m_requiredContent;
+    [SerializeField] private int m_maxContent = 3;
+
     public override int maxWorkers => m_maxWorkers;
+    // Amount of resource consummed per seconds at max efficiency
+    public float maxResourceConsumption
+        => (m_input.resource != null && m_productionTime > 0.0f) ? m_input.count / m_productionTime : 0.0f;
+    // Amount of resource produced per seconds at max efficiency
+    public float maxResourceProduction
+        => (m_output.resource != null && m_productionTime > 0.0f) ? m_output.count / m_productionTime : 0.0f;
+
+    public float GetEfficiency(Building building)
+    {
+        float efficiency = (float)building.workers / m_maxWorkers;
+
+        if (m_requiredContent != null)
+        {
+            building.cell.GetNeighbors(m_requiredContent, out List<HexCellContent> neighbors);
+            efficiency *= Mathf.Clamp01((float)neighbors.Count / m_maxContent);
+        }
+
+        return efficiency;
+    }
 
     public override void OnInstanceUpdated(Building building)
     {
@@ -38,8 +62,9 @@ public class ProductionBuildingData : BuildingData
         // If a production cycle is in progress advance
         if (building.progress > 0.0f)
         {
-            float efficiency = (float)building.workers / m_maxWorkers;
+            float efficiency = GetEfficiency(building);
             building.progress += efficiency * Time.deltaTime / m_productionTime;
+
             if (building.progress < 1.0f)
                 return;
 
@@ -48,7 +73,6 @@ public class ProductionBuildingData : BuildingData
             if (m_output.resource != null)
                 Player.instance.resources.AddResource(m_output);
         }
-
 
         // Take input from storage if necessary and possible
         if (m_input.resource != null)
