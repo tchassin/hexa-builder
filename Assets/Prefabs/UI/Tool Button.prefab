@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7541487398242455078}
   - component: {fileID: 7541487398242455079}
+  - component: {fileID: 5198575343816929876}
+  - component: {fileID: 2569181646516413536}
   m_Layer: 5
   m_Name: Tool Button
   m_TagString: Untagged
@@ -100,6 +102,37 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   m_IsOn: 0
+--- !u!225 &5198575343816929876
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7541487398242455073}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &2569181646516413536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7541487398242455073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 555de96e076fb494eafc672af3445629, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_buildingData: {fileID: 0}
+  m_nameLabelPrefab: {fileID: 59125530209199275, guid: 30ca8fbde352ffe43a61bdf2ce1e60d0,
+    type: 3}
+  m_descriptionLabelPrefab: {fileID: 59125530209199275, guid: c0576177c6f4b084a80d4a9507b9091a,
+    type: 3}
+  m_costDisplayPrefab: {fileID: 8324508088457784220, guid: 3057f6595be879c448709fb7b91c6369,
+    type: 3}
 --- !u!1 &7541487398752970263
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,7 +193,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -312,7 +345,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.7058824}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
