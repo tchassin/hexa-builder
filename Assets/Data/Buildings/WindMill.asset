@@ -23,12 +23,14 @@ MonoBehaviour:
   m_upgrade: {fileID: 0}
   m_hasFacingDirection: 1
   m_facingDirection: 2
-  m_productionTime: 3
-  m_minWorkers: 2
-  m_maxWorkers: 5
+  m_productionTime: 1
+  m_minWorkers: 3
+  m_maxWorkers: 6
   m_input:
     m_resource: {fileID: 0}
     m_count: 0
   m_output:
-    m_resource: {fileID: 0}
-    m_count: 0
+    m_resource: {fileID: 11400000, guid: 6f28ee30571cfc147a18452ae1735dd5, type: 2}
+    m_count: 1
+  m_requiredContent: {fileID: 11400000, guid: 0c0b09320e0085e478fddd1f037cf178, type: 2}
+  m_maxContent: 5

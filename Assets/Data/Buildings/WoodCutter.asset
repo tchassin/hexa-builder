@@ -32,3 +32,5 @@ MonoBehaviour:
   m_output:
     m_resource: {fileID: 11400000, guid: dfa640970fe2a854e9f7d36a7da3b0f3, type: 2}
     m_count: 1
+  m_requiredContent: {fileID: 11400000, guid: 477616d1ca2eb9147bcf9552e8f63875, type: 2}
+  m_maxContent: 4
