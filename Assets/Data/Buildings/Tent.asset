@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8d8993ec800b3c4da13a76f7e243423, type: 3}
   m_Name: Tent
   m_EditorClassIdentifier: 
+  m_name: Tent
+  m_description: Increases maximum Population.
   m_requiredTerrain: 1
   m_resourceCost:
   - m_resource: {fileID: 11400000, guid: dee38a74798d37842b4cbfcc6dcf75cf, type: 2}

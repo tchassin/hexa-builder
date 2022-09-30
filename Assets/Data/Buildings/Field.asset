@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd209c3fd21e8149aa29e232b2b5c1a, type: 3}
   m_Name: Field
   m_EditorClassIdentifier: 
+  m_name: Field
+  m_description: Required by Windmills to produce Food.
   m_requiredTerrain: 1
   m_resourceCost:
   - m_resource: {fileID: 11400000, guid: dee38a74798d37842b4cbfcc6dcf75cf, type: 2}

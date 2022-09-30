@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bac5672894ecedc4cac7585d547a3360, type: 3}
   m_Name: Road
   m_EditorClassIdentifier: 
+  m_name: Road
+  m_description: Enables people and goods circulation.
   m_requiredTerrain: 1
   m_resourceCost:
   - m_resource: {fileID: 11400000, guid: dee38a74798d37842b4cbfcc6dcf75cf, type: 2}
