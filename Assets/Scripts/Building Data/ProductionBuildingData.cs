@@ -19,6 +19,8 @@ public class ProductionBuildingData : BuildingData
     [SerializeField] private int m_maxContent = 3;
 
     public override int maxWorkers => m_maxWorkers;
+    public ResourceData outputResource => m_output.resource;
+    public ResourceData inputResource => m_input.resource;
     // Amount of resource consummed per seconds at max efficiency
     public float maxResourceConsumption
         => (m_input.resource != null && m_productionTime > 0.0f) ? m_input.count / m_productionTime : 0.0f;
