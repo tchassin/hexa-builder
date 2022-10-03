@@ -1189,6 +1189,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c90e84bb3b72074fadc5465416d5208, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_defaultTextPrefab: {fileID: 59125530209199275, guid: c0576177c6f4b084a80d4a9507b9091a,
+    type: 3}
 --- !u!114 &520883244
 MonoBehaviour:
   m_ObjectHideFlags: 0

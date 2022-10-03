@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1494290646642229100}
   - component: {fileID: 59125530209199275}
   m_Layer: 5
-  m_Name: Building Description Label
+  m_Name: Tooltip Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

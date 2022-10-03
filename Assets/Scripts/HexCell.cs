@@ -145,5 +145,4 @@ public class HexCell : MonoBehaviour
                 directions.Add((HexDirection)i);
         }
     }
-
 }

@@ -1,10 +1,13 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(RectTransform))]
 [RequireComponent(typeof(CanvasGroup))]
 public class Tooltip : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI m_defaultTextPrefab;
+
     private readonly List<GameObject> m_content = new();
     private CanvasGroup m_canvasGroup;
     private RectTransform m_rectTransform;
@@ -18,19 +21,28 @@ public class Tooltip : MonoBehaviour
         Hide();
     }
 
-    public void Show(List<GameObject> content)
+    public void AddText(string text)
     {
-        ClearContent();
+        if (m_defaultTextPrefab == null)
+            return;
 
-        foreach (var contentItem in content)
-        {
-            if (contentItem == null)
-                continue;
+        var label = Instantiate(m_defaultTextPrefab, m_rectTransform);
+        label.text = text;
 
-            contentItem.transform.SetParent(m_rectTransform);
-            m_content.Add(contentItem);
-        }
+        m_content.Add(label.gameObject);
+    }
 
+    public void AddContent(GameObject contentItem)
+    {
+        if (contentItem == null)
+            return;
+
+        contentItem.transform.SetParent(m_rectTransform);
+        m_content.Add(contentItem);
+    }
+
+    public void Show()
+    {
         m_rectTransform.anchoredPosition = Input.mousePosition;
         m_canvasGroup.alpha = 1;
     }
@@ -41,7 +53,7 @@ public class Tooltip : MonoBehaviour
         ClearContent();
     }
 
-    private void ClearContent()
+    public void ClearContent()
     {
         foreach (var contentItem in m_content)
         {

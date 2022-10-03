@@ -30,15 +30,22 @@ public class ProductionBuildingData : BuildingData
 
     public float GetEfficiency(Building building)
     {
-        float efficiency = (float)building.workers / m_maxWorkers;
-
-        if (m_requiredContent != null)
-        {
-            building.cell.GetNeighbors(m_requiredContent, out List<HexCellContent> neighbors);
-            efficiency *= Mathf.Clamp01((float)neighbors.Count / m_maxContent);
-        }
+        float efficiency = GetEfficiency(building.cell);
+        efficiency *= (float)building.workers / m_maxWorkers;
 
         return efficiency;
+    }
+    public float GetEfficiency(HexCell cell)
+    {
+        if (!CanBePlacedOn(cell))
+            return 0.0f;
+
+        if (m_requiredContent == null)
+            return 1.0f;
+
+        cell.GetNeighbors(m_requiredContent, out List<HexCellContent> neighbors);
+
+        return Mathf.Clamp01((float)neighbors.Count / m_maxContent);
     }
 
     public override void OnInstanceUpdated(Building building)
