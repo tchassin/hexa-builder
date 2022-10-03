@@ -49,6 +49,12 @@ public class BuildingDataTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
             string workersText = $"Requires {productionBuildingData.maxWorkers} workers."; ;
             m_tooltip.AddText(workersText);
 
+            if (productionBuildingData.requiredNeighborData != null)
+            {
+                string neighborsText = $"Requires {productionBuildingData.requiredNeighborCount} {productionBuildingData.requiredNeighborData.displayName} on neigbor cells."; ;
+                m_tooltip.AddText(neighborsText);
+            }
+
             if (productionBuildingData.inputResource != null)
             {
                 string inputText = $"Uses {productionBuildingData.maxResourceConsumption:N2} {productionBuildingData.inputResource.displayName}/s.";

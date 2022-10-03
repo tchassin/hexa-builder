@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -50,6 +51,13 @@ public class BuildingStateDisplay : MonoBehaviour
 
             string workersText = $"Workers: {m_building.workers}/{productionBuildingData.maxWorkers} (min {productionBuildingData.minWorkers})"; ;
             m_tooltip.AddText(workersText);
+
+            if (productionBuildingData.requiredNeighborData != null)
+            {
+                m_building.cell.GetNeighbors(productionBuildingData.requiredNeighborData, out List<HexCellContent> neighbors);
+                string neighborsText = $"{neighbors.Count}/{productionBuildingData.requiredNeighborCount} {productionBuildingData.requiredNeighborData.displayName} on neigbor cells."; ;
+                m_tooltip.AddText(neighborsText);
+            }
 
             if (productionBuildingData.inputResource != null)
             {

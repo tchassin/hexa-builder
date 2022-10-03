@@ -18,6 +18,8 @@ public class ProductionBuildingData : BuildingData
     [SerializeField] private CellContentData m_requiredContent;
     [SerializeField] private int m_maxContent = 3;
 
+    public CellContentData requiredNeighborData => m_requiredContent;
+    public int requiredNeighborCount => m_maxContent;
     public int minWorkers => m_minWorkers;
     public override int maxWorkers => m_maxWorkers;
     public ResourceData outputResource => m_output.resource;
