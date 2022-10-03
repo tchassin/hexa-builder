@@ -16,11 +16,6 @@ public class BuildModeClickHandler : IGridClickHandler
         BuildModeManager.instance.EnterBuildMode(m_buildingData.buildingPrefab, m_buildingData.GetFacingDirection());
     }
 
-    ~BuildModeClickHandler()
-    {
-        BuildModeManager.instance.LeaveBuildMode();
-    }
-
     public void OnCellHoverBegin(HexCell cell)
     {
         BuildModeManager.instance.UpdatePreview(m_buildingData, cell);

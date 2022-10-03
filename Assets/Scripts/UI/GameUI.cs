@@ -8,6 +8,7 @@ public class GameUI : MonoBehaviour
     [SerializeField] private UICell m_uiCellPrefab;
     [SerializeField] private Canvas m_gridCanvas;
     [SerializeField] private ToggleGroup m_toggleGroup;
+    [SerializeField] private CanvasGroup m_toolbar;
 
     [Header("Population")]
     [SerializeField] private TextMeshProUGUI m_populationLabel;
@@ -90,15 +91,18 @@ public class GameUI : MonoBehaviour
 
     public void ToggleSelectMode()
     {
-        SetSelectMode();
-
         if (m_toggleGroup.AnyTogglesOn())
             m_toggleGroup.SetAllTogglesOff();
+        else
+            SetClickHandler(null);
     }
 
     public void ToggleTerrainMode(bool isEnabled)
     {
-        m_clickHandler = isEnabled ? new TerrainClickHandler() : null;
+        if (isEnabled)
+            SetClickHandler(new TerrainClickHandler());
+        else
+            SetClickHandler(null);
     }
 
     public void ToggleBuildRoadMode(RoadData roadData)
@@ -106,22 +110,22 @@ public class GameUI : MonoBehaviour
         if (roadData != null)
         {
             if (m_clickHandler is RoadModeClickHandler builder && builder.roadData == roadData)
-                SetSelectMode();
+                SetClickHandler(null);
             else
-                m_clickHandler = new RoadModeClickHandler(roadData);
+                SetClickHandler(new RoadModeClickHandler(roadData));
         }
         else
         {
-            SetSelectMode();
+            SetClickHandler(null);
         }
     }
 
     public void ToggleAddTreeMode(bool isEnabled)
     {
         if (isEnabled)
-            m_clickHandler = new PropsClickHandler(BuildModeManager.instance.treePrefab);
+            SetClickHandler(new PropsClickHandler(BuildModeManager.instance.treePrefab));
         else
-            SetSelectMode();
+            SetClickHandler(null);
     }
 
     public void ToggleBuildMode(BuildingData buildingData)
@@ -129,29 +133,36 @@ public class GameUI : MonoBehaviour
         if (buildingData != null)
         {
             if (m_clickHandler is BuildModeClickHandler builder && builder.buildingData == buildingData)
-                SetSelectMode();
+                SetClickHandler(null);
             else
-                m_clickHandler = new BuildModeClickHandler(buildingData);
+                SetClickHandler(new BuildModeClickHandler(buildingData));
         }
         else
         {
-            SetSelectMode();
+            SetClickHandler(null);
         }
     }
 
     public void ToggleDestroyMode(bool isEnabled)
     {
-        if (isEnabled)
-            m_clickHandler = new DestroyModeClickHandler();
-        else
-            SetSelectMode();
+        SetClickHandler(isEnabled ? new DestroyModeClickHandler() : null);
     }
 
-    private void SetSelectMode()
+    private void SetClickHandler(IGridClickHandler clickHandler)
     {
-        m_clickHandler = new SelectionClickHandler();
+        m_clickHandler = clickHandler ?? new SelectionClickHandler();
 
-        BuildModeManager.instance.LeaveBuildMode();
+        bool isSelection = m_clickHandler is SelectionClickHandler;
+        m_toolbar.alpha = isSelection ? 1.0f : 0.0f;
+        m_toolbar.interactable = isSelection;
+        m_toolbar.blocksRaycasts = isSelection;
+
+        // Hide tooltip if we were placing buildings
+        m_tooltip.Hide();
+
+        // Exit building mode if necessary
+        if (m_clickHandler is not BuildModeClickHandler && m_clickHandler is not PropsClickHandler)
+            BuildModeManager.instance.LeaveBuildMode();
     }
 
     public UICell GetUICell(HexCell cell)

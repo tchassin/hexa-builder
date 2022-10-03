@@ -15,11 +15,6 @@ public class PropsClickHandler : IGridClickHandler
         BuildModeManager.instance.EnterBuildMode(propPrefab.gameObject, (HexDirection)Random.Range(0, 6));
     }
 
-    ~PropsClickHandler()
-    {
-        BuildModeManager.instance.LeaveBuildMode();
-    }
-
     public void OnCellHoverBegin(HexCell cell)
     {
         BuildModeManager.instance.UpdatePreview(propPrefab, cell);

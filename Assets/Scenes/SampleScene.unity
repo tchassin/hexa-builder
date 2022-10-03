@@ -1784,6 +1784,7 @@ MonoBehaviour:
     type: 3}
   m_gridCanvas: {fileID: 1208879835}
   m_toggleGroup: {fileID: 2030297174}
+  m_toolbar: {fileID: 2030297177}
   m_populationLabel: {fileID: 400010746}
   m_jobsLabel: {fileID: 1378524416}
   m_gold: {fileID: 11400000, guid: dee38a74798d37842b4cbfcc6dcf75cf, type: 2}
@@ -3556,6 +3557,7 @@ GameObject:
   - component: {fileID: 2030297176}
   - component: {fileID: 2030297175}
   - component: {fileID: 2030297174}
+  - component: {fileID: 2030297177}
   m_Layer: 5
   m_Name: Toolbar
   m_TagString: Untagged
@@ -3642,6 +3644,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2030297172}
   m_CullTransparentMesh: 1
+--- !u!225 &2030297177
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2030297172}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2066444081
 GameObject:
   m_ObjectHideFlags: 0
