@@ -18,6 +18,7 @@ public class ProductionBuildingData : BuildingData
     [SerializeField] private CellContentData m_requiredContent;
     [SerializeField] private int m_maxContent = 3;
 
+    public int minWorkers => m_minWorkers;
     public override int maxWorkers => m_maxWorkers;
     public ResourceData outputResource => m_output.resource;
     public ResourceData inputResource => m_input.resource;
@@ -30,14 +31,18 @@ public class ProductionBuildingData : BuildingData
 
     public float GetEfficiency(Building building)
     {
+        if (building.workers < minWorkers)
+            return 0.0f;
+
         float efficiency = GetEfficiency(building.cell);
         efficiency *= (float)building.workers / m_maxWorkers;
 
         return efficiency;
     }
+
     public float GetEfficiency(HexCell cell)
     {
-        if (!CanBePlacedOn(cell))
+        if (!IsCompatibleCell(cell) && cell.content != null && cell.content.data != this)
             return 0.0f;
 
         if (m_requiredContent == null)

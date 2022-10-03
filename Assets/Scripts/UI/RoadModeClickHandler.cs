@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class RoadModeClickHandler : IGridClickHandler
 {
+    public RoadData roadData => m_roadData;
+
     private bool isPlacingRoads => m_selectedCells.Count > 0;
 
     private RoadData m_roadData;
@@ -74,6 +76,8 @@ public class RoadModeClickHandler : IGridClickHandler
     {
         if (isPlacingRoads)
             EndBuildMode();
+        else
+            m_gameUI.ToggleSelectMode();
     }
 
     private void EndBuildMode()

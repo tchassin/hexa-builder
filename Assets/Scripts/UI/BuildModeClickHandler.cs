@@ -3,7 +3,7 @@ using UnityEngine;
 public class BuildModeClickHandler : IGridClickHandler
 {
     private BuildingData m_buildingData;
-    private Tooltip m_tooltip;
+    private GameUI m_gameUI;
 
     public BuildingData buildingData => m_buildingData;
 
@@ -11,7 +11,7 @@ public class BuildModeClickHandler : IGridClickHandler
     {
         Debug.Assert(buildingData != null);
         m_buildingData = buildingData;
-        m_tooltip = Object.FindObjectOfType<Tooltip>();
+        m_gameUI = Object.FindObjectOfType<GameUI>();
 
         BuildModeManager.instance.EnterBuildMode(m_buildingData.buildingPrefab, m_buildingData.GetFacingDirection());
     }
@@ -25,31 +25,32 @@ public class BuildModeClickHandler : IGridClickHandler
     {
         BuildModeManager.instance.UpdatePreview(m_buildingData, cell);
 
-        if (m_tooltip == null)
+        if (m_gameUI.tooltip == null)
             return;
 
+        m_gameUI.tooltip.ClearContent();
         if (!buildingData.CanBePlacedOn(cell))
         {
-            m_tooltip.AddText($"Can't be placed here!");
-            m_tooltip.Show();
+            m_gameUI.tooltip.AddText($"Can't be placed here!");
+            m_gameUI.tooltip.Show();
         }
         else if (!buildingData.CanBeAfforded())
         {
-            m_tooltip.AddText($"Not enough resources!");
-            m_tooltip.Show();
+            m_gameUI.tooltip.AddText($"Not enough resources!");
+            m_gameUI.tooltip.Show();
         }
         else if (buildingData is ProductionBuildingData productionBuildingData)
         {
             float maxEfficiency = productionBuildingData.GetEfficiency(cell);
-            m_tooltip.AddText($"Max efficiency: {maxEfficiency}");
-            m_tooltip.Show();
+            m_gameUI.tooltip.AddText($"Max efficiency: {maxEfficiency}");
+            m_gameUI.tooltip.Show();
         }
     }
 
     public void OnCellHoverEnd(HexCell cell)
     {
-        if (m_tooltip != null)
-            m_tooltip.Hide();
+        if (m_gameUI.tooltip != null)
+            m_gameUI.tooltip.Hide();
     }
 
     public void OnLeftClickBegin(HexCell cell)
@@ -67,5 +68,6 @@ public class BuildModeClickHandler : IGridClickHandler
 
     public void OnRightClickEnd(HexCell cell)
     {
+        m_gameUI.ToggleSelectMode();
     }
 }

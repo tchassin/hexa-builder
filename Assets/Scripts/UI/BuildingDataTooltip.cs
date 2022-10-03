@@ -2,13 +2,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class BuildingTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class BuildingDataTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private BuildingData m_buildingData;
 
     [Header("Prefabs")]
     [SerializeField] private TextMeshProUGUI m_nameLabelPrefab;
-    [SerializeField] private TextMeshProUGUI m_descriptionLabelPrefab;
     [SerializeField] private ResourceNumberDisplay m_costDisplayPrefab;
 
     private Tooltip m_tooltip;
@@ -16,10 +15,12 @@ public class BuildingTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (m_tooltip == null)
-            m_tooltip = FindObjectOfType<Tooltip>();
+            m_tooltip = FindObjectOfType<GameUI>().tooltip;
 
         if (m_tooltip == null)
             return;
+
+        m_tooltip.ClearContent();
 
         if (!string.IsNullOrEmpty(m_buildingData.description))
         {

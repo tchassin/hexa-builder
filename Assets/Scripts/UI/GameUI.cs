@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameUI : MonoBehaviour
 {
     [SerializeField] private UICell m_uiCellPrefab;
     [SerializeField] private Canvas m_gridCanvas;
+    [SerializeField] private ToggleGroup m_toggleGroup;
 
     [Header("Population")]
     [SerializeField] private TextMeshProUGUI m_populationLabel;
@@ -19,10 +21,23 @@ public class GameUI : MonoBehaviour
     [SerializeField] private ResourceData m_food;
     [SerializeField] private TextMeshProUGUI m_foodLabel;
 
+    public Tooltip tooltip => m_tooltip;
+
     private readonly List<UICell> m_uiCells = new List<UICell>();
     private IGridClickHandler m_clickHandler;
     private HexCell m_lastHighlightedCell;
     private HexGrid m_grid;
+    private Tooltip m_tooltip;
+
+    private void Awake()
+    {
+        m_tooltip = FindObjectOfType<Tooltip>();
+    }
+
+    private void Start()
+    {
+        m_clickHandler = new SelectionClickHandler();
+    }
 
     private void Update()
     {
@@ -73,6 +88,14 @@ public class GameUI : MonoBehaviour
         return cell;
     }
 
+    public void ToggleSelectMode()
+    {
+        SetSelectMode();
+
+        if (m_toggleGroup.AnyTogglesOn())
+            m_toggleGroup.SetAllTogglesOff();
+    }
+
     public void ToggleTerrainMode(bool isEnabled)
     {
         m_clickHandler = isEnabled ? new TerrainClickHandler() : null;
@@ -80,29 +103,55 @@ public class GameUI : MonoBehaviour
 
     public void ToggleBuildRoadMode(RoadData roadData)
     {
-        m_clickHandler = roadData != null
-            ? m_clickHandler is BuildModeClickHandler builder && builder.buildingData == roadData
-                ? null
-                : new RoadModeClickHandler(roadData)
-            : null;
+        if (roadData != null)
+        {
+            if (m_clickHandler is RoadModeClickHandler builder && builder.roadData == roadData)
+                SetSelectMode();
+            else
+                m_clickHandler = new RoadModeClickHandler(roadData);
+        }
+        else
+        {
+            SetSelectMode();
+        }
     }
+
     public void ToggleAddTreeMode(bool isEnabled)
     {
-        m_clickHandler = isEnabled ? new PropsClickHandler(BuildModeManager.instance.treePrefab) : null;
+        if (isEnabled)
+            m_clickHandler = new PropsClickHandler(BuildModeManager.instance.treePrefab);
+        else
+            SetSelectMode();
     }
 
     public void ToggleBuildMode(BuildingData buildingData)
     {
-        m_clickHandler = buildingData != null
-            ? m_clickHandler is BuildModeClickHandler builder && builder.buildingData == buildingData
-                ? null
-                : new BuildModeClickHandler(buildingData)
-            : null;
+        if (buildingData != null)
+        {
+            if (m_clickHandler is BuildModeClickHandler builder && builder.buildingData == buildingData)
+                SetSelectMode();
+            else
+                m_clickHandler = new BuildModeClickHandler(buildingData);
+        }
+        else
+        {
+            SetSelectMode();
+        }
     }
 
     public void ToggleDestroyMode(bool isEnabled)
     {
-        m_clickHandler = isEnabled ? new DestroyModeClickHandler() : null;
+        if (isEnabled)
+            m_clickHandler = new DestroyModeClickHandler();
+        else
+            SetSelectMode();
+    }
+
+    private void SetSelectMode()
+    {
+        m_clickHandler = new SelectionClickHandler();
+
+        BuildModeManager.instance.LeaveBuildMode();
     }
 
     public UICell GetUICell(HexCell cell)

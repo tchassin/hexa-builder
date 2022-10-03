@@ -10,6 +10,8 @@ public abstract class CellContentData : ScriptableObject
     public string description => m_description;
     public TerrainType requiredTerrainType => m_requiredTerrain;
 
-    public virtual bool CanBePlacedOn(HexCell cell)
-        => cell != null && m_requiredTerrain == cell.terrainType && !cell.isOccupied;
+    public bool IsCompatibleCell(HexCell cell)
+        => cell != null && m_requiredTerrain == cell.terrainType;
+    public bool CanBePlacedOn(HexCell cell)
+         => IsCompatibleCell(cell) && !cell.isOccupied;
 }
