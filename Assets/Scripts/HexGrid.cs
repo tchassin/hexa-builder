@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public enum TerrainType : int
@@ -15,11 +16,14 @@ public class HexGrid : MonoBehaviour
     [SerializeField] private GameUI m_gameUI;
 
     public Vector2Int size => m_size;
+    public HexGridAccessLevels accessLevels => m_accessLevels;
+
     public Rect worldBounds => m_worldBounds;
 
     private Vector2Int m_size;
     private readonly List<HexCell> m_cells = new List<HexCell>();
     private Rect m_worldBounds;
+    private HexGridAccessLevels m_accessLevels;
 
     private void Start()
     {
@@ -39,6 +43,8 @@ public class HexGrid : MonoBehaviour
 
         Generate(data);
 
+        m_accessLevels = new(this);
+
         m_gameUI.Initialize();
     }
 
@@ -53,6 +59,9 @@ public class HexGrid : MonoBehaviour
 
     public HexCell GetCell(Vector3 position)
         => GetCell(HexCoordinates.FromPosition(position));
+
+    public int GetCellIndex(HexCell hexCell)
+        => hexCell != null ? GridPositionToIndex(hexCell.position) : -1;
 
     public List<HexCell> ShortestPath(HexCell start, HexCell end, Func<HexCell, float> heuristic = null)
     {
@@ -174,9 +183,27 @@ public class HexGrid : MonoBehaviour
     public Vector2Int IndexToGridPosition(int id)
         => new Vector2Int(id % m_size.x, id / m_size.x);
 
+    public int GridPositionToIndex(HexCoordinates position)
+        => GridPositionToIndex(position.x, position.z);
+
     public int GridPositionToIndex(Vector2Int position)
         => GridPositionToIndex(position.x, position.y);
 
     public int GridPositionToIndex(int x, int y)
         => y * m_size.x + x;
+
+    private void OnDrawGizmos()
+    {
+        if (m_cells == null)
+            return;
+
+        foreach (var cell in m_cells)
+        {
+            if (cell == null)
+                continue;
+
+            string text = $"R={m_accessLevels.GetAccessToRoad(cell)}\nW={m_accessLevels.GetAccessToWorkers(cell)}";
+            Handles.Label(cell.transform.position, text);
+        }
+    }
 }

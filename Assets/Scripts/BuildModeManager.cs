@@ -66,6 +66,8 @@ public class BuildModeManager : MonoBehaviour
         building.RotateMeshToward(buildingData.GetFacingDirection());
         cell.SetContent(building);
 
+        m_grid.accessLevels.OnBuildingAdded(building);
+
         Player.instance.resources.UseResources(buildingData.resourceCost);
 
         m_preview.SetActive(false);
@@ -100,6 +102,8 @@ public class BuildModeManager : MonoBehaviour
             var road = Instantiate(m_buildingPrefab, cell.transform);
             road.Initialize(roadData);
             cell.SetContent(road);
+
+            m_grid.accessLevels.OnBuildingAdded(road);
 
             Player.instance.resources.UseResources(roadData.resourceCost);
         }
