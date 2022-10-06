@@ -10,10 +10,8 @@ public class Building : HexCellContent
     public float progress { get; set; }
     public int workers => m_workers;
     public int maxWorkers => buildingData != null ? buildingData.maxWorkers : 0;
-    public ResourceStorage storedResources => m_storedResources;
 
-    private readonly Stack<BuildingData> m_upgradePath = new Stack<BuildingData>();
-    private readonly ResourceStorage m_storedResources = new ResourceStorage();
+    private readonly Stack<BuildingData> m_upgradePath = new();
     private int m_workers = 0;
 
     private void Update()
@@ -70,21 +68,22 @@ public class Building : HexCellContent
     }
 
     public bool CanBeUpgraded()
-        => buildingData != null && buildingData.hasUpgrade && buildingData.upgrade.CanBeAfforded() && buildingData.upgrade.CanBePlacedOn(cell);
+        => buildingData != null && buildingData.hasUpgrade && buildingData.upgrade.CanBeAfforded() && buildingData.upgrade.CanBeUpgradedFrom(this);
 
     public void Upgrade()
     {
         Debug.Assert(buildingData != null, this);
         Debug.Assert(CanBeUpgraded(), this);
 
-        buildingData.OnInstanceUpgradedFrom(this);
+        buildingData.OnInstanceUpgradedFrom(this, buildingData.upgrade.buildingData);
 
-        m_upgradePath.Pop();
+        var previousData = buildingData;
+        m_upgradePath.Push(buildingData.upgrade.buildingData);
         OnDataChanged();
 
         Player.instance.resources.UseResources(buildingData.resourceCost);
 
-        buildingData.OnInstanceUpgradedTo(this);
+        buildingData.OnInstanceUpgradedTo(this, previousData);
     }
 
     public void Downgrade()
@@ -92,17 +91,18 @@ public class Building : HexCellContent
         Debug.Assert(buildingData != null, this);
         Debug.Assert(canBeDowngraded, this);
 
-        buildingData.OnInstanceDowngradedFrom(this);
+        buildingData.OnInstanceDowngradedFrom(this, buildingData);
 
-        m_upgradePath.Push(buildingData.upgrade);
+        m_upgradePath.Pop();
         OnDataChanged();
 
-        buildingData.OnInstanceDowngradedTo(this);
+        buildingData.OnInstanceDowngradedTo(this, buildingData);
     }
 
     private void OnDataChanged()
     {
         Debug.Assert(buildingData != null, this);
         UpdateModel(buildingData.buildingPrefab);
+        RotateMeshToward(buildingData.GetFacingDirection());
     }
 }

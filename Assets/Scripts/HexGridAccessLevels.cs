@@ -150,7 +150,7 @@ public class HexGridAccessLevels
                     }
                     else if (neighbor.content.data is ProductionBuildingData productionBuildingData)
                     {
-                        var resourceData = productionBuildingData.outputResource;
+                        var resourceData = productionBuildingData.output.resource;
                         if (resourceData != null)
                         {
                             if (resourceAccess.ContainsKey(resourceData))

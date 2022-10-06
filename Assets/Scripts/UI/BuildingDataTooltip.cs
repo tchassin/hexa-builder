@@ -51,19 +51,22 @@ public class BuildingDataTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
 
             if (productionBuildingData.requiredNeighborData != null)
             {
-                string neighborsText = $"Requires {productionBuildingData.requiredNeighborCount} {productionBuildingData.requiredNeighborData.displayName} on neigbor cells."; ;
+                string neighborsText = $"Requires {productionBuildingData.requiredNeighborCount}" +
+                    $" {productionBuildingData.requiredNeighborData.displayName} on neigbor cells."; ;
                 m_tooltip.AddText(neighborsText);
             }
 
-            if (productionBuildingData.inputResource != null)
+            if (productionBuildingData.input.resource != null)
             {
-                string inputText = $"Uses {productionBuildingData.maxResourceConsumption:N2} {productionBuildingData.inputResource.displayName}/s.";
+                string inputText = $"Uses {productionBuildingData.maxResourceConsumption:N2}" +
+                    $" {productionBuildingData.input.resource.displayName}/s.";
                 m_tooltip.AddText(inputText);
             }
 
-            if (productionBuildingData.outputResource != null)
+            if (productionBuildingData.output.resource != null)
             {
-                string outputText = $"Produces {productionBuildingData.maxResourceProduction:N2} {productionBuildingData.outputResource.displayName}/s.";
+                string outputText = $"Produces {productionBuildingData.maxResourceProduction:N2}" +
+                    $" {productionBuildingData.output.resource.displayName}/s.";
                 m_tooltip.AddText(outputText);
             }
         }

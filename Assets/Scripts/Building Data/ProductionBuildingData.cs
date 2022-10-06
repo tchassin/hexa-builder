@@ -4,32 +4,12 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Data/Building/Production")]
 public class ProductionBuildingData : BuildingData
 {
-    [SerializeField] private float m_productionTime = 1.0f;
-
     [Header("Workers")]
     [SerializeField] private int m_minWorkers = 1;
     [SerializeField] private int m_maxWorkers = 3;
 
-    [Header("Resources")]
-    [SerializeField] private ResourceNumber m_input;
-    [SerializeField] private ResourceNumber m_output;
-
-    [Header("Required props & building")]
-    [SerializeField] private CellContentData m_requiredContent;
-    [SerializeField] private int m_maxContent = 3;
-
-    public CellContentData requiredNeighborData => m_requiredContent;
-    public int requiredNeighborCount => m_maxContent;
     public int minWorkers => m_minWorkers;
     public override int maxWorkers => m_maxWorkers;
-    public ResourceData outputResource => m_output.resource;
-    public ResourceData inputResource => m_input.resource;
-    // Amount of resource consummed per seconds at max efficiency
-    public float maxResourceConsumption
-        => (m_input.resource != null && m_productionTime > 0.0f) ? m_input.count / m_productionTime : 0.0f;
-    // Amount of resource produced per seconds at max efficiency
-    public float maxResourceProduction
-        => (m_output.resource != null && m_productionTime > 0.0f) ? m_output.count / m_productionTime : 0.0f;
 
     public float GetEfficiency(Building building)
     {
@@ -47,12 +27,12 @@ public class ProductionBuildingData : BuildingData
         if (!IsCompatibleCell(cell) && cell.content != null && cell.content.data != this)
             return 0.0f;
 
-        if (m_requiredContent == null)
+        if (requiredNeighborData == null)
             return 1.0f;
 
-        cell.GetNeighbors(m_requiredContent, out List<HexCellContent> neighbors);
+        cell.GetNeighbors(requiredNeighborData, out List<HexCellContent> neighbors);
 
-        return Mathf.Clamp01((float)neighbors.Count / m_maxContent);
+        return Mathf.Clamp01((float)neighbors.Count / requiredNeighborCount);
     }
 
     public override void OnInstanceUpdated(Building building)
@@ -84,42 +64,43 @@ public class ProductionBuildingData : BuildingData
             return;
 
         // Check that we have access to the required resources
-        if (m_input.resource != null && !building.cell.HasAccessToResource(m_input.resource))
+        if (input.resource != null && !building.cell.HasAccessToResource(input.resource))
             return;
 
         // If a production cycle is in progress advance
         if (building.progress > 0.0f)
         {
             float efficiency = GetEfficiency(building);
-            building.progress += efficiency * Time.deltaTime / m_productionTime;
+            building.progress += efficiency * Time.deltaTime / cycleDuration;
 
             if (building.progress < 1.0f)
                 return;
 
             // Output directly to player resources for now
-            if (m_output.resource != null)
-                Player.instance.resources.AddResource(m_output);
+            if (output.resource != null)
+                Player.instance.resources.AddResource(output);
         }
 
         // Take input from storage if necessary and possible
-        if (m_input.resource != null)
+        if (input.resource != null)
         {
             // Check that we have enough input resource to process
-            if (!building.storedResources.HasResource(m_input))
+            if (!Player.instance.resources.HasResource(input))
             {
                 // Reset progress if a production cycle can't be started
-                building.progress = 0.0f;
+                OnCycleCompleted(building, false);
 
                 return;
             }
 
             // Consume input resource and start new production cycle
-            building.storedResources.UseResource(m_input);
+            Player.instance.resources.UseResource(input);
         }
 
-        building.progress = building.progress >= 1.0f
-            ? Mathf.Max(float.Epsilon, building.progress - 1.0f)
-            : Time.deltaTime / m_productionTime;
+        if (building.progress >= 1.0f)
+            OnCycleCompleted(building);
+        else
+            building.progress = Time.deltaTime / cycleDuration;
     }
 
     public override void OnInstanceBuilt(Building building)
@@ -134,27 +115,27 @@ public class ProductionBuildingData : BuildingData
         Player.instance.RemoveJobs(m_maxWorkers);
     }
 
-    public override void OnInstanceDowngradedFrom(Building building)
+    public override void OnInstanceDowngradedFrom(Building building, BuildingData newData)
     {
-        base.OnInstanceDowngradedFrom(building);
+        base.OnInstanceDowngradedFrom(building, newData);
         Player.instance.RemoveJobs(m_maxWorkers);
     }
 
-    public override void OnInstanceDowngradedTo(Building building)
+    public override void OnInstanceDowngradedTo(Building building, BuildingData previousData)
     {
-        base.OnInstanceDowngradedTo(building);
+        base.OnInstanceDowngradedTo(building, previousData);
         Player.instance.AddJobs(m_maxWorkers);
     }
 
-    public override void OnInstanceUpgradedFrom(Building building)
+    public override void OnInstanceUpgradedFrom(Building building, BuildingData newData)
     {
-        base.OnInstanceUpgradedFrom(building);
+        base.OnInstanceUpgradedFrom(building, newData);
         Player.instance.RemoveJobs(m_maxWorkers);
     }
 
-    public override void OnInstanceUpgradedTo(Building building)
+    public override void OnInstanceUpgradedTo(Building building, BuildingData previousData)
     {
-        base.OnInstanceUpgradedTo(building);
+        base.OnInstanceUpgradedTo(building, previousData);
         Player.instance.AddJobs(m_maxWorkers);
     }
 }
