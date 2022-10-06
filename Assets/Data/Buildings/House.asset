@@ -13,12 +13,26 @@ MonoBehaviour:
   m_Name: House
   m_EditorClassIdentifier: 
   m_name: House
-  m_description: Increases maximum Population.
+  m_description: Increases maximum Population and proved income through taxes.
   m_requiredTerrain: 1
-  m_resourceCost: []
   m_buildingPrefab: {fileID: 919132149155446097, guid: 5984a7bbfcf2cd840a5cde2d93d4738f,
     type: 3}
-  m_upgrade: {fileID: 0}
+  m_upgrade:
+    buildingData: {fileID: 0}
+    isAutomatic: 0
+    requiresAccessToWokers: 0
+    requiredResourceAccess: []
+    resourceCost: []
   m_hasFacingDirection: 1
   m_facingDirection: 1
+  m_cycleDuration: 1
+  m_resourceCost: []
+  m_input:
+    m_resource: {fileID: 11400000, guid: 6f28ee30571cfc147a18452ae1735dd5, type: 2}
+    m_count: 1
+  m_output:
+    m_resource: {fileID: 11400000, guid: dee38a74798d37842b4cbfcc6dcf75cf, type: 2}
+    m_count: 1
+  m_requiredContent: {fileID: 0}
+  m_maxContent: 3
   m_capacity: 5

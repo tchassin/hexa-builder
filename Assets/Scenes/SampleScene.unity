@@ -2645,9 +2645,9 @@ MonoBehaviour:
   m_resources:
     m_resources:
     - m_resource: {fileID: 11400000, guid: dee38a74798d37842b4cbfcc6dcf75cf, type: 2}
-      m_count: 250
+      m_count: 1000
     - m_resource: {fileID: 11400000, guid: dfa640970fe2a854e9f7d36a7da3b0f3, type: 2}
-      m_count: 20
+      m_count: 200
     - m_resource: {fileID: 11400000, guid: 6f28ee30571cfc147a18452ae1735dd5, type: 2}
       m_count: 0
 --- !u!4 &1530921316

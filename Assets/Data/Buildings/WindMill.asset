@@ -15,19 +15,22 @@ MonoBehaviour:
   m_name: Windmill
   m_description: Produces Food from nearby Fields.
   m_requiredTerrain: 1
-  m_resourceCost:
-  - m_resource: {fileID: 11400000, guid: dee38a74798d37842b4cbfcc6dcf75cf, type: 2}
-    m_count: 15
-  - m_resource: {fileID: 11400000, guid: dfa640970fe2a854e9f7d36a7da3b0f3, type: 2}
-    m_count: 3
   m_buildingPrefab: {fileID: 919132149155446097, guid: 7aadd88ab3f1dfa40a7fda16a61a626f,
     type: 3}
-  m_upgrade: {fileID: 0}
+  m_upgrade:
+    buildingData: {fileID: 0}
+    isAutomatic: 0
+    requiresAccessToWokers: 0
+    requiredResourceAccess: []
+    resourceCost: []
   m_hasFacingDirection: 1
   m_facingDirection: 2
-  m_productionTime: 1
-  m_minWorkers: 3
-  m_maxWorkers: 6
+  m_cycleDuration: 0.25
+  m_resourceCost:
+  - m_resource: {fileID: 11400000, guid: dee38a74798d37842b4cbfcc6dcf75cf, type: 2}
+    m_count: 50
+  - m_resource: {fileID: 11400000, guid: dfa640970fe2a854e9f7d36a7da3b0f3, type: 2}
+    m_count: 30
   m_input:
     m_resource: {fileID: 0}
     m_count: 0
@@ -36,3 +39,5 @@ MonoBehaviour:
     m_count: 1
   m_requiredContent: {fileID: 11400000, guid: 0c0b09320e0085e478fddd1f037cf178, type: 2}
   m_maxContent: 5
+  m_minWorkers: 3
+  m_maxWorkers: 6

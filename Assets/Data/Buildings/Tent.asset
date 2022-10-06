@@ -15,12 +15,29 @@ MonoBehaviour:
   m_name: Tent
   m_description: Increases maximum Population.
   m_requiredTerrain: 1
-  m_resourceCost:
-  - m_resource: {fileID: 11400000, guid: dee38a74798d37842b4cbfcc6dcf75cf, type: 2}
-    m_count: 8
   m_buildingPrefab: {fileID: 919132149155446097, guid: 2077a87cc4e8eb346a0b07fd9256a0d5,
     type: 3}
-  m_upgrade: {fileID: 11400000, guid: 77c4ed63eb87acf4d8b48bf9a4d7b365, type: 2}
+  m_upgrade:
+    buildingData: {fileID: 11400000, guid: 77c4ed63eb87acf4d8b48bf9a4d7b365, type: 2}
+    isAutomatic: 1
+    requiresAccessToWokers: 0
+    requiredResourceAccess:
+    - {fileID: 11400000, guid: 6f28ee30571cfc147a18452ae1735dd5, type: 2}
+    resourceCost:
+    - m_resource: {fileID: 11400000, guid: 6f28ee30571cfc147a18452ae1735dd5, type: 2}
+      m_count: 1
   m_hasFacingDirection: 1
   m_facingDirection: 1
+  m_cycleDuration: 1
+  m_resourceCost:
+  - m_resource: {fileID: 11400000, guid: dee38a74798d37842b4cbfcc6dcf75cf, type: 2}
+    m_count: 25
+  m_input:
+    m_resource: {fileID: 0}
+    m_count: 0
+  m_output:
+    m_resource: {fileID: 0}
+    m_count: 0
+  m_requiredContent: {fileID: 0}
+  m_maxContent: 3
   m_capacity: 3
