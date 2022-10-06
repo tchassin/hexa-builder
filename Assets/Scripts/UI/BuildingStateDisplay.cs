@@ -39,6 +39,9 @@ public class BuildingStateDisplay : MonoBehaviour
         if (!string.IsNullOrEmpty(buildingData.description))
             m_tooltip.AddText(buildingData.description);
 
+        if (buildingData is not RoadData && !m_building.cell.HasAccessToRoad())
+            m_tooltip.AddText("This building has no access to roads", Color.red);
+
         if (buildingData is HousingData housingData)
         {
             string text = $"Pop: {m_building.workers}/{housingData.maxWorkers}";
@@ -46,7 +49,15 @@ public class BuildingStateDisplay : MonoBehaviour
         }
         else if (buildingData is ProductionBuildingData productionBuildingData)
         {
-            float efficiency = productionBuildingData.GetEfficiency(m_building);
+            if (!m_building.cell.HasAccessToWorkers())
+                m_tooltip.AddText("This building has no access to workers", Color.red);
+
+            var inputResource = productionBuildingData.inputResource;
+            bool needsResourceAccess = inputResource != null && !m_building.cell.HasAccessToResource(inputResource);
+            if (needsResourceAccess)
+                m_tooltip.AddText($"This building has no access to {inputResource.displayName}", Color.red);
+
+            float efficiency = needsResourceAccess ? 0 : productionBuildingData.GetEfficiency(m_building);
             m_tooltip.AddText($"Eff.: {Mathf.RoundToInt(efficiency * 100)}%");
 
             string workersText = $"Workers: {m_building.workers}/{productionBuildingData.maxWorkers} (min {productionBuildingData.minWorkers})"; ;
@@ -59,7 +70,7 @@ public class BuildingStateDisplay : MonoBehaviour
                 m_tooltip.AddText(neighborsText);
             }
 
-            if (productionBuildingData.inputResource != null)
+            if (inputResource != null)
             {
                 string inputText = $"Uses {efficiency * productionBuildingData.maxResourceConsumption:N2}/{productionBuildingData.maxResourceConsumption:N2} {productionBuildingData.inputResource.displayName}/s.";
                 m_tooltip.AddText(inputText);

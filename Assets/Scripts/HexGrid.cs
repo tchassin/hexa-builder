@@ -155,7 +155,7 @@ public class HexGrid : MonoBehaviour
             // Instantiate cell and set position
             Vector3 position = hexCoordinates.ToPosition() + positionOffset + Vector3.right * xOffset;
             var cell = Instantiate(m_cellPrefab, position, Quaternion.identity, transform);
-            cell.Initialize(hexCoordinates, (terrainData[hexCoordinates.z, hexCoordinates.x] != 0) ? TerrainType.Ground : TerrainType.Water);
+            cell.Initialize(this, hexCoordinates, (terrainData[hexCoordinates.z, hexCoordinates.x] != 0) ? TerrainType.Ground : TerrainType.Water);
             cell.gameObject.name = $"Cell ({hexCoordinates.x}; {hexCoordinates.z})";
             m_cells.Add(cell);
 

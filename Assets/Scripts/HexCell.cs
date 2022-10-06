@@ -4,7 +4,6 @@ using UnityEngine.Events;
 
 public class HexCell : MonoBehaviour
 {
-
     [SerializeField] private UnityEvent m_onTerrainChanged;
     [SerializeField] private UnityEvent m_onMouseEnter;
     [SerializeField] private UnityEvent m_onMouseExit;
@@ -12,17 +11,16 @@ public class HexCell : MonoBehaviour
     [Header("Material")]
     [SerializeField] private Material m_groundMaterial;
     [SerializeField] private Material m_waterMaterial;
-
     public HexCoordinates position => m_position;
     public TerrainType terrainType => m_terrainType;
     public List<HexCell> neighbors => new List<HexCell>(m_neighbors);
     public HexCellContent content => m_content;
     public bool isOccupied => m_content != null;
-
     public UnityEvent onTerrainChanged => m_onTerrainChanged;
     public UnityEvent onMouseEnter => m_onMouseEnter;
     public UnityEvent onMouseExit => m_onMouseExit;
 
+    private HexGrid m_grid;
     private Renderer m_renderer;
     private TerrainType m_terrainType;
     private HexCoordinates m_position;
@@ -46,8 +44,9 @@ public class HexCell : MonoBehaviour
         m_onMouseExit.Invoke();
     }
 
-    public void Initialize(HexCoordinates gridPosition, TerrainType terrainType)
+    public void Initialize(HexGrid grid, HexCoordinates gridPosition, TerrainType terrainType)
     {
+        m_grid = grid;
         m_position = gridPosition;
         SetTerrainType(terrainType);
     }
@@ -145,4 +144,13 @@ public class HexCell : MonoBehaviour
                 directions.Add((HexDirection)i);
         }
     }
+
+    public bool HasAccessToRoad()
+        => m_grid != null ? m_grid.accessLevels.HasAccessToRoad(this) : false;
+
+    public bool HasAccessToWorkers()
+        => m_grid != null ? m_grid.accessLevels.HasAccessToWorkers(this) : false;
+
+    public bool HasAccessToResource(ResourceData resource)
+        => m_grid != null ? m_grid.accessLevels.HasAccessToResource(this, resource) : false;
 }

@@ -26,8 +26,17 @@ public class Tooltip : MonoBehaviour
         if (m_defaultTextPrefab == null)
             return;
 
+        AddText(text, m_defaultTextPrefab.color);
+    }
+
+    public void AddText(string text, Color color)
+    {
+        if (m_defaultTextPrefab == null)
+            return;
+
         var label = Instantiate(m_defaultTextPrefab, m_rectTransform);
         label.text = text;
+        label.color = color;
 
         m_content.Add(label.gameObject);
     }

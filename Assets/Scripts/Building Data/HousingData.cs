@@ -11,16 +11,24 @@ public class HousingData : BuildingData
     {
         base.OnInstanceUpdated(building);
 
-        if (building.workers == maxWorkers)
-            return;
+        if (building.cell.HasAccessToRoad())
+        {
+            if (building.workers == maxWorkers)
+                return;
 
-        building.progress += Random.Range(0.01f, 0.2f) * Time.deltaTime;
+            building.progress += Random.Range(0.01f, 0.2f) * Time.deltaTime;
 
-        if (building.progress < 1.0f)
-            return;
+            if (building.progress < 1.0f)
+                return;
 
-        building.AddWorkers(1);
-        building.progress = building.workers < maxWorkers ? building.progress - 1 : 0.0f;
+            building.AddWorkers(1);
+            building.progress = building.workers < maxWorkers ? building.progress - 1 : 0.0f;
+        }
+        else
+        {
+            building.RemoveWorkers(building.workers);
+            building.progress = 0;
+        }
     }
 
     public override void OnInstanceBuilt(Building building)

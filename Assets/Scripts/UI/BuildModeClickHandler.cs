@@ -3,6 +3,7 @@ using UnityEngine;
 public class BuildModeClickHandler : IGridClickHandler
 {
     private BuildingData m_buildingData;
+    private HexGrid m_grid;
     private GameUI m_gameUI;
 
     public BuildingData buildingData => m_buildingData;
@@ -12,6 +13,7 @@ public class BuildModeClickHandler : IGridClickHandler
         Debug.Assert(buildingData != null);
         m_buildingData = buildingData;
         m_gameUI = Object.FindObjectOfType<GameUI>();
+        m_grid = Object.FindObjectOfType<HexGrid>();
 
         BuildModeManager.instance.EnterBuildMode(m_buildingData.buildingPrefab, m_buildingData.GetFacingDirection());
     }
@@ -32,6 +34,11 @@ public class BuildModeClickHandler : IGridClickHandler
         else if (!buildingData.CanBeAfforded())
         {
             m_gameUI.tooltip.AddText($"Not enough resources!");
+            m_gameUI.tooltip.Show();
+        }
+        else if (!m_grid.accessLevels.HasAccessToRoad(cell))
+        {
+            m_gameUI.tooltip.AddText($"Buildings need road access!");
             m_gameUI.tooltip.Show();
         }
         else if (buildingData is ProductionBuildingData productionBuildingData)
