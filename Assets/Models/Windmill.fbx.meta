@@ -9,7 +9,21 @@ ModelImporter:
   - first:
       74: 1743248970431498279
     second: Helix|HelixAction
-  externalObjects: {}
+  - first:
+      74: 8629374886132419271
+    second: Helix|Rotor|Rotor|RotorAction
+  - first:
+      74: 8456671039216593379
+    second: ndmill|Idleill|Idle
+  - first:
+      74: 4412474592931921012
+    second: Windmill|Turn
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Windmill
+    second: {fileID: 2100000, guid: 7c2f3bdf0d9ffd142a006aa9438c7595, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -39,8 +53,8 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Helix|HelixAction
-      takeName: Helix|HelixAction
+      name: Windmill|Turn
+      takeName: Helix|Windmill|Turn
       internalID: 0
       firstFrame: 0
       lastFrame: 149
@@ -50,8 +64,8 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 1
+      loopTime: 0
+      loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
