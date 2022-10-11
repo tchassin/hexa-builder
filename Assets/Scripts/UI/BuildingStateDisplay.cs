@@ -25,15 +25,9 @@ public class BuildingStateDisplay : MonoBehaviour
         if (!string.IsNullOrEmpty(buildingData.description))
         {
             if (m_nameLabelPrefab != null)
-            {
-                var nameLabel = Instantiate(m_nameLabelPrefab);
-                nameLabel.text = buildingData.displayName;
-                m_tooltip.AddContent(nameLabel.gameObject);
-            }
+                m_tooltip.AddContent(m_nameLabelPrefab, label => label.text = buildingData.displayName);
             else
-            {
                 m_tooltip.AddText(buildingData.displayName);
-            }
         }
 
         var inputResource = buildingData.input.resource;
@@ -95,16 +89,11 @@ public class BuildingStateDisplay : MonoBehaviour
         {
             m_tooltip.AddText("");
             string upgradeText = $"Upgrade: {buildingData.upgrade.buildingData.displayName}";
+
             if (m_nameLabelPrefab != null)
-            {
-                var upgradeLabel = Instantiate(m_nameLabelPrefab);
-                upgradeLabel.text = upgradeText;
-                m_tooltip.AddContent(upgradeLabel.gameObject);
-            }
+                m_tooltip.AddContent(m_nameLabelPrefab, label => label.text = upgradeText);
             else
-            {
                 m_tooltip.AddText(upgradeText);
-            }
 
             if (m_costDisplayPrefab != null)
             {
@@ -117,11 +106,7 @@ public class BuildingStateDisplay : MonoBehaviour
 
                 m_tooltip.AddText("Cost:");
                 foreach (var resourceNumber in buildingData.upgrade.resourceCost)
-                {
-                    var costDisplay = Instantiate(m_costDisplayPrefab);
-                    costDisplay.SetResourceCost(resourceNumber);
-                    m_tooltip.AddContent(costDisplay.gameObject);
-                }
+                    m_tooltip.AddContent(m_costDisplayPrefab, costDisplay => costDisplay.SetResourceCost(resourceNumber));
             }
         }
 

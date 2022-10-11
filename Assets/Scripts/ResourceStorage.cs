@@ -9,11 +9,29 @@ public class ResourceStorage
 
     public List<ResourceData> storedResources => m_resources.ConvertAll(rn => rn.resource);
 
+    public ResourceStorage() { }
+
+    public ResourceStorage(ResourceStorage other)
+    {
+        m_resources.AddRange(other.m_resources);
+    }
+
+    public void Clear() => m_resources.Clear();
+
     public int GetResource(ResourceData resource)
     {
         int index = m_resources.FindIndex(rn => rn.resource == resource);
 
         return index != -1 ? m_resources[index].count : 0;
+    }
+
+    public void SetResource(ResourceNumber resourceNumber)
+    {
+        var index = m_resources.FindIndex(resourceNumber.IsSameResource);
+        if (index == -1)
+            m_resources.Add(new ResourceNumber(resourceNumber));
+        else
+            m_resources[index] = resourceNumber;
     }
 
     public bool HasResource(ResourceNumber resourceNumber)
@@ -36,9 +54,15 @@ public class ResourceStorage
     {
         var index = m_resources.FindIndex(resourceNumber.IsSameResource);
         if (index == -1)
-            m_resources[index] = new ResourceNumber(resourceNumber);
+            m_resources.Add(new ResourceNumber(resourceNumber));
         else
             m_resources[index] = m_resources[index] + resourceNumber.count;
+    }
+
+    public void AddResources(ResourceStorage resourceStorage)
+    {
+        foreach (var resourceNumber in resourceStorage.m_resources)
+            AddResource(resourceNumber);
     }
 
     public bool UseResource(ResourceNumber resourceNumber)

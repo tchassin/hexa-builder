@@ -65,7 +65,7 @@ public class RoadModeClickHandler : IGridClickHandler
         foreach (var uiCell in m_selectedCells)
             path.Add(uiCell.cell);
 
-        BuildModeManager.instance.PlaceRoads(m_roadData, path);
+        BuildModeManager.instance.BuyRoads(m_roadData, path);
 
         EndBuildMode();
     }

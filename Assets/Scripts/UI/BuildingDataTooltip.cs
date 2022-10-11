@@ -25,15 +25,9 @@ public class BuildingDataTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
         if (!string.IsNullOrEmpty(m_buildingData.description))
         {
             if (m_nameLabelPrefab != null)
-            {
-                var nameLabel = Instantiate(m_nameLabelPrefab);
-                nameLabel.text = m_buildingData.displayName;
-                m_tooltip.AddContent(nameLabel.gameObject);
-            }
+                m_tooltip.AddContent(m_nameLabelPrefab, label => label.text = m_buildingData.displayName);
             else
-            {
                 m_tooltip.AddText(m_buildingData.displayName);
-            }
         }
 
         if (!string.IsNullOrEmpty(m_buildingData.description))
@@ -74,11 +68,7 @@ public class BuildingDataTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
         if (m_costDisplayPrefab != null)
         {
             foreach (var resourceNumber in m_buildingData.resourceCost)
-            {
-                var costDisplay = Instantiate(m_costDisplayPrefab);
-                costDisplay.SetResourceCost(resourceNumber);
-                m_tooltip.AddContent(costDisplay.gameObject);
-            }
+                m_tooltip.AddContent(m_costDisplayPrefab, costDisplay => costDisplay.SetResourceCost(resourceNumber));
         }
 
         m_tooltip.Show();

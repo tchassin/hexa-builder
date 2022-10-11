@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif // UNITY_EDITOR
 
 public enum TerrainType : int
 {
@@ -11,6 +13,7 @@ public enum TerrainType : int
 
 public class HexGrid : MonoBehaviour
 {
+    [SerializeField] private GameStateData m_initialState;
     [SerializeField] private HexCell m_cellPrefab;
     [SerializeField] private Building m_buildingPrefab;
     [SerializeField] private GameUI m_gameUI;
@@ -27,26 +30,46 @@ public class HexGrid : MonoBehaviour
 
     private void Start()
     {
-        int[,] data = new int[10, 10]
+        if (m_initialState != null)
         {
-            { 1, 1, 1, 1, 1, 1, 0, 1, 1, 1 },
-            { 1, 1, 1, 1, 1, 1, 0, 1, 1, 1 },
-            { 1, 1, 1, 1, 1, 0, 0, 1, 1, 1 },
-            { 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
-            { 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
-            { 1, 1, 1, 1, 0, 0, 1, 1, 1, 1 },
-            { 1, 1, 1, 1, 0, 0, 1, 1, 1, 1 },
-            { 1, 1, 1, 0, 0, 0, 1, 1, 1, 1 },
-            { 1, 1, 1, 0, 1, 0, 1, 1, 1, 1 },
-            { 1, 1, 0, 0, 1, 0, 1, 1, 1, 1 },
-        };
+            GameState.Load(m_initialState.state, this);
+        }
+        else
+        {
+            int[] data = new int[100]
+            {
+                 1, 1, 1, 1, 1, 1, 0, 1, 1, 1,
+                 1, 1, 1, 1, 1, 1, 0, 1, 1, 1,
+                 1, 1, 1, 1, 1, 0, 0, 1, 1, 1,
+                 1, 1, 1, 1, 1, 0, 1, 1, 1, 1,
+                 1, 1, 1, 1, 1, 0, 1, 1, 1, 1,
+                 1, 1, 1, 1, 0, 0, 1, 1, 1, 1,
+                 1, 1, 1, 1, 0, 0, 1, 1, 1, 1,
+                 1, 1, 1, 0, 0, 0, 1, 1, 1, 1,
+                 1, 1, 1, 0, 1, 0, 1, 1, 1, 1,
+                 1, 1, 0, 0, 1, 0, 1, 1, 1, 1,
+            };
 
-        Generate(data);
+            Initialize(data, 10, new List<SerializedCellContent>());
+        }
 
-        m_accessLevels = new(this);
 
         m_gameUI.Initialize();
     }
+
+#if UNITY_EDITOR
+    private void Update()
+    {
+        if (!Input.GetKeyDown(KeyCode.Space))
+            return;
+
+        var gameStateData = ScriptableObject.CreateInstance<GameStateData>();
+        gameStateData.Capture();
+
+        AssetDatabase.CreateAsset(gameStateData, "Assets/GameState.asset");
+        AssetDatabase.SaveAssets();
+    }
+#endif // UNITY_EDITOR
 
     public HexCell GetCell(int index)
         => m_cells[index];
@@ -126,10 +149,13 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    public void Generate(int[,] terrainData)
+    public void Initialize(int[] terrainData, int width, List<SerializedCellContent> cellContents)
     {
-        m_size = new Vector2Int(terrainData.GetLength(0), terrainData.GetLength(1));
+        m_size = new Vector2Int(width, terrainData.Length / width);
         int cellCount = m_size.x * m_size.y;
+
+        // must be initialized after size
+        m_accessLevels = new(this);
 
         // Clear previous objects and initialize array
         if (m_cells != null)
@@ -155,7 +181,7 @@ public class HexGrid : MonoBehaviour
             // Instantiate cell and set position
             Vector3 position = hexCoordinates.ToPosition() + positionOffset + Vector3.right * xOffset;
             var cell = Instantiate(m_cellPrefab, position, Quaternion.identity, transform);
-            cell.Initialize(this, hexCoordinates, (terrainData[hexCoordinates.z, hexCoordinates.x] != 0) ? TerrainType.Ground : TerrainType.Water);
+            cell.Initialize(this, hexCoordinates, (terrainData[i] != 0) ? TerrainType.Ground : TerrainType.Water);
             cell.gameObject.name = $"Cell ({hexCoordinates.x}; {hexCoordinates.z})";
             m_cells.Add(cell);
 
@@ -178,6 +204,18 @@ public class HexGrid : MonoBehaviour
                 }
             }
         }
+
+        var buildMode = BuildModeManager.instance;
+        foreach (var cellContent in cellContents)
+        {
+            var cell = GetCell(cellContent.position);
+            if (cellContent.data is RoadData road)
+                buildMode.PlaceRoad(road, cell);
+            else if (cellContent.data is BuildingData building)
+                buildMode.PlaceBuilding(building, cell);
+            else if (cellContent.data is PropData prop)
+                buildMode.PlaceProp(prop, cell);
+        }
     }
 
     public Vector2Int IndexToGridPosition(int id)
@@ -192,6 +230,7 @@ public class HexGrid : MonoBehaviour
     public int GridPositionToIndex(int x, int y)
         => y * m_size.x + x;
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if (m_cells == null)
@@ -206,4 +245,5 @@ public class HexGrid : MonoBehaviour
             Handles.Label(cell.transform.position, text);
         }
     }
+#endif // UNITY_EDITOR
 }

@@ -2,22 +2,22 @@ using UnityEngine;
 
 public class PropsClickHandler : IGridClickHandler
 {
-    private Prop m_propPrefab;
+    private PropData m_propData;
     private GameUI m_gameUI;
 
-    public Prop propPrefab => m_propPrefab;
+    public PropData propData => m_propData;
 
-    public PropsClickHandler(Prop propPrefab)
+    public PropsClickHandler(PropData propData)
     {
-        Debug.Assert(propPrefab != null);
+        Debug.Assert(propData != null);
+        m_propData = propData;
         m_gameUI = Object.FindObjectOfType<GameUI>();
-        m_propPrefab = propPrefab;
-        BuildModeManager.instance.EnterBuildMode(propPrefab.gameObject, (HexDirection)Random.Range(0, 6));
+        BuildModeManager.instance.EnterBuildMode(BuildModeManager.instance.treePrefab.gameObject, (HexDirection)Random.Range(0, 6));
     }
 
     public void OnCellHoverBegin(HexCell cell)
     {
-        BuildModeManager.instance.UpdatePreview(propPrefab, cell);
+        BuildModeManager.instance.UpdatePreview(propData, cell);
     }
 
     public void OnCellHoverEnd(HexCell cell)
@@ -26,7 +26,7 @@ public class PropsClickHandler : IGridClickHandler
 
     public void OnLeftClickBegin(HexCell cell)
     {
-        BuildModeManager.instance.PlaceProp(m_propPrefab, cell);
+        BuildModeManager.instance.PlaceProp(m_propData, cell);
     }
 
     public void OnLeftClickEnd(HexCell cell)

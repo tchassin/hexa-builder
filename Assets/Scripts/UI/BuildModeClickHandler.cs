@@ -29,23 +29,23 @@ public class BuildModeClickHandler : IGridClickHandler
         if (!buildingData.CanBePlacedOn(cell))
         {
             m_gameUI.tooltip.AddText($"Can't be placed here!");
-            m_gameUI.tooltip.Show();
+            m_gameUI.tooltip.Show(Input.mousePosition);
         }
         else if (!buildingData.CanBeAfforded())
         {
             m_gameUI.tooltip.AddText($"Not enough resources!");
-            m_gameUI.tooltip.Show();
+            m_gameUI.tooltip.Show(Input.mousePosition);
         }
         else if (!m_grid.accessLevels.HasAccessToRoad(cell))
         {
             m_gameUI.tooltip.AddText($"Buildings need road access!");
-            m_gameUI.tooltip.Show();
+            m_gameUI.tooltip.Show(Input.mousePosition);
         }
         else if (buildingData is ProductionBuildingData productionBuildingData)
         {
             float maxEfficiency = productionBuildingData.GetEfficiency(cell);
             m_gameUI.tooltip.AddText($"Max efficiency: {maxEfficiency}");
-            m_gameUI.tooltip.Show();
+            m_gameUI.tooltip.Show(Input.mousePosition);
         }
     }
 
@@ -57,7 +57,7 @@ public class BuildModeClickHandler : IGridClickHandler
 
     public void OnLeftClickBegin(HexCell cell)
     {
-        BuildModeManager.instance.PlaceBuilding(buildingData, cell);
+        BuildModeManager.instance.BuyBuilding(buildingData, cell);
     }
 
     public void OnLeftClickEnd(HexCell cell)

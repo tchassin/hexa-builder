@@ -77,6 +77,9 @@ public class GameUI : MonoBehaviour
             m_clickHandler.OnRightClickBegin(cell);
         else if (Input.GetMouseButtonUp(1))
             m_clickHandler.OnRightClickEnd(cell);
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Application.Quit();
     }
 
     public HexCell GetCellUnderMouse()
@@ -120,12 +123,19 @@ public class GameUI : MonoBehaviour
         }
     }
 
-    public void ToggleAddTreeMode(bool isEnabled)
+    public void TogglePropMode(PropData propData)
     {
-        if (isEnabled)
-            SetClickHandler(new PropsClickHandler(BuildModeManager.instance.treePrefab));
+        if (propData != null)
+        {
+            if (m_clickHandler is PropsClickHandler builder && builder.propData == propData)
+                SetClickHandler(null);
+            else
+                SetClickHandler(new PropsClickHandler(propData));
+        }
         else
+        {
             SetClickHandler(null);
+        }
     }
 
     public void ToggleBuildMode(BuildingData buildingData)

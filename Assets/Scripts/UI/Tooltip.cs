@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(RectTransform))]
 [RequireComponent(typeof(CanvasGroup))]
@@ -11,6 +12,7 @@ public class Tooltip : MonoBehaviour
     private readonly List<GameObject> m_content = new();
     private CanvasGroup m_canvasGroup;
     private RectTransform m_rectTransform;
+    private Vector2 m_defaultAnchoredPosition;
 
     private void Awake()
     {
@@ -19,6 +21,8 @@ public class Tooltip : MonoBehaviour
         m_canvasGroup.interactable = false;
         m_canvasGroup.blocksRaycasts = false;
         Hide();
+
+        m_defaultAnchoredPosition = m_rectTransform.anchoredPosition;
     }
 
     public void AddText(string text)
@@ -31,28 +35,30 @@ public class Tooltip : MonoBehaviour
 
     public void AddText(string text, Color color)
     {
-        if (m_defaultTextPrefab == null)
-            return;
-
-        var label = Instantiate(m_defaultTextPrefab, m_rectTransform);
-        label.text = text;
-        label.color = color;
-
-        m_content.Add(label.gameObject);
+        AddContent(m_defaultTextPrefab, label =>
+        {
+            label.text = text;
+            label.color = color;
+        });
     }
 
-    public void AddContent(GameObject contentItem)
+    public void AddContent<ContentType>(ContentType prefab, UnityAction<ContentType> onInstantiated)
+        where ContentType : MonoBehaviour
     {
-        if (contentItem == null)
+        if (prefab == null)
             return;
 
-        contentItem.transform.SetParent(m_rectTransform);
-        m_content.Add(contentItem);
+        var contentItem = Instantiate(prefab, m_rectTransform);
+        onInstantiated?.Invoke(contentItem);
+
+        m_content.Add(contentItem.gameObject);
     }
 
-    public void Show()
+    public void Show() => Show(m_defaultAnchoredPosition);
+
+    public void Show(Vector2 position)
     {
-        m_rectTransform.anchoredPosition = Input.mousePosition;
+        m_rectTransform.anchoredPosition = position;
         m_canvasGroup.alpha = 1;
     }
 

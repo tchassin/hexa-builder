@@ -53,12 +53,25 @@ public class BuildModeManager : MonoBehaviour
             Destroy(m_preview);
     }
 
+    public bool BuyBuilding(BuildingData buildingData, HexCell cell)
+    {
+
+        if (!buildingData.CanBeAfforded())
+            return false;
+
+        if (!PlaceBuilding(buildingData, cell))
+            return false;
+
+        Player.instance.resources.UseResources(buildingData.resourceCost);
+
+        m_preview.SetActive(false);
+
+        return true;
+    }
+
     public bool PlaceBuilding(BuildingData buildingData, HexCell cell)
     {
         if (!buildingData.CanBePlacedOn(cell))
-            return false;
-
-        if (!buildingData.CanBeAfforded())
             return false;
 
         var building = Instantiate(m_buildingPrefab, cell.transform);
@@ -68,50 +81,53 @@ public class BuildModeManager : MonoBehaviour
 
         m_grid.accessLevels.OnBuildingAdded(building);
 
-        Player.instance.resources.UseResources(buildingData.resourceCost);
-
-        m_preview.SetActive(false);
-
         return true;
     }
 
-    public bool PlaceProp(Prop propPrefab, HexCell cell)
+    public bool PlaceProp(PropData propData, HexCell cell)
     {
-        if (!propPrefab.CanBePlacedOn(cell))
+        if (!propData.CanBePlacedOn(cell))
             return false;
 
-        var prop = Instantiate(propPrefab, cell.transform);
+        var prop = Instantiate(m_treePrefab, cell.transform);
         prop.transform.rotation = Quaternion.Euler(0, Random.Range(-2, 3) * 60.0f, 0);
         cell.SetContent(prop);
 
-        m_preview.SetActive(false);
+        if (m_preview != null)
+            m_preview.SetActive(false);
 
         return true;
     }
 
-    public bool PlaceRoads(RoadData roadData, List<HexCell> path)
+    public void BuyRoads(RoadData roadData, List<HexCell> path)
     {
         foreach (var cell in path)
         {
-            if (!roadData.CanBePlacedOn(cell))
-                continue;
-
             if (!Player.instance.resources.HasResources(roadData.resourceCost))
                 break;
 
-            var road = Instantiate(m_buildingPrefab, cell.transform);
-            road.Initialize(roadData);
-            cell.SetContent(road);
-
-            m_grid.accessLevels.OnBuildingAdded(road);
+            if (!PlaceRoad(roadData, cell))
+                continue;
 
             Player.instance.resources.UseResources(roadData.resourceCost);
         }
+    }
+
+    public bool PlaceRoad(RoadData roadData, HexCell cell)
+    {
+        if (!roadData.CanBePlacedOn(cell))
+            return false;
+
+        var road = Instantiate(m_buildingPrefab, cell.transform);
+        road.Initialize(roadData);
+        cell.SetContent(road);
+
+        m_grid.accessLevels.OnBuildingAdded(road);
 
         return true;
     }
 
-    public void UpdatePreview(HexCellContent content, HexCell cell)
+    public void UpdatePreview(PropData propData, HexCell cell)
     {
         m_preview.SetActive(cell != null);
         if (!m_preview.activeInHierarchy)
@@ -119,7 +135,7 @@ public class BuildModeManager : MonoBehaviour
 
         m_preview.transform.position = cell.transform.position;
 
-        bool canBePlaced = !cell.isOccupied && content.CanBePlacedOn(cell);
+        bool canBePlaced = !cell.isOccupied && propData.CanBePlacedOn(cell);
 
         var meshRenderers = new List<MeshRenderer>();
         m_preview.GetComponentsInChildren(meshRenderers);
