@@ -91,12 +91,14 @@ public class Building : HexCellContent
         Debug.Assert(buildingData != null, this);
         Debug.Assert(canBeDowngraded, this);
 
-        buildingData.OnInstanceDowngradedFrom(this, buildingData);
-
+        var previousData = buildingData;
         m_upgradePath.Pop();
+
+        previousData.OnInstanceDowngradedFrom(this, buildingData);
+
         OnDataChanged();
 
-        buildingData.OnInstanceDowngradedTo(this, buildingData);
+        buildingData.OnInstanceDowngradedTo(this, previousData);
     }
 
     private void OnDataChanged()
