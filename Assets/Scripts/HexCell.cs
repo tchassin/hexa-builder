@@ -11,6 +11,8 @@ public class HexCell : MonoBehaviour
     [Header("Material")]
     [SerializeField] private Material m_groundMaterial;
     [SerializeField] private Material m_waterMaterial;
+
+    public HexGrid grid => m_grid;
     public HexCoordinates position => m_position;
     public TerrainType terrainType => m_terrainType;
     public List<HexCell> neighbors => new List<HexCell>(m_neighbors);

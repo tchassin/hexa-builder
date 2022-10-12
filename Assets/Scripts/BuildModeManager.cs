@@ -79,8 +79,6 @@ public class BuildModeManager : MonoBehaviour
         building.RotateMeshToward(buildingData.GetFacingDirection());
         cell.SetContent(building);
 
-        m_grid.accessLevels.OnBuildingAdded(building);
-
         return true;
     }
 
@@ -121,8 +119,6 @@ public class BuildModeManager : MonoBehaviour
         var road = Instantiate(m_buildingPrefab, cell.transform);
         road.Initialize(roadData);
         cell.SetContent(road);
-
-        m_grid.accessLevels.OnBuildingAdded(road);
 
         return true;
     }

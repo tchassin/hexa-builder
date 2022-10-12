@@ -57,6 +57,8 @@ public class Building : HexCellContent
 
         Debug.Assert(buildingData != null, this);
         buildingData.OnInstanceBuilt(this);
+
+        cell.grid.accessLevels.OnBuildingAdded(this);
     }
 
     public override void OnRemoved()
@@ -65,6 +67,8 @@ public class Building : HexCellContent
 
         if (buildingData)
             buildingData.OnInstanceDemolished(this);
+
+        cell.grid.accessLevels.OnBuildingRemoved(this);
     }
 
     public bool CanBeUpgraded()
